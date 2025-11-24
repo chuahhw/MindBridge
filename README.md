@@ -1,5 +1,4 @@
 # MindBridge
-# MindBridge
 
 MindBridge is a **Spring Boot web application** for student and counselor management. It uses **Spring MVC, Thymeleaf, Spring Security, Hibernate/JPA**, and **MySQL** as the database.
 
