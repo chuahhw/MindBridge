@@ -1,0 +1,87 @@
+/* Reset & Base */
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+
+body { 
+    background-color: #f8f9fa; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    color: #333; 
+    line-height: 1.6; 
+}
+
+/* Mood History Entries */
+.mood-entry { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 8px; 
+    padding: 20px; 
+    background: #f8f9fa; 
+    border-radius: 12px; 
+    border-left: 4px solid #1666f2; 
+}
+
+.mood-entry.great { border-left-color: #17a2b8; }
+.mood-entry.good { border-left-color: #28a745; }
+.mood-entry.okay { border-left-color: #ffc107; }
+.mood-entry.not-great { border-left-color: #fd7e14; }
+.mood-entry.bad { border-left-color: #dc3545; }
+.mood-entry.awful { border-left-color: #6c757d; }
+
+.mood-emotion { font-size: 18px; font-weight: 600; color: #333; }
+.mood-note { font-size: 14px; color: #6c757d; line-height: 1.4; }
+.mood-date { font-size: 12px; color: #999; }
+
+/* Modal Customization */
+.mood-options {
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 12px; 
+    margin-bottom: 24px; 
+}
+
+.mood-option {
+    padding: 16px; 
+    border: 2px solid #e9ecef; 
+    border-radius: 12px; 
+    text-align: center; 
+    cursor: pointer; 
+    transition: all 0.3s ease; 
+    background: white; 
+}
+
+.mood-option:hover { border-color: #1666f2; }
+.mood-option.selected { border-color: #1666f2; background: #e7f3ff; }
+
+.mood-emoji { font-size: 24px; margin-bottom: 8px; }
+.mood-label { font-size: 14px; font-weight: 500; color: #333; }
+
+.note-input {
+    width: 100%; 
+    padding: 12px; 
+    border: 2px solid #e9ecef; 
+    border-radius: 8px; 
+    font-size: 14px; 
+    resize: vertical; 
+    min-height: 80px; 
+    margin-bottom: 24px; 
+}
+
+.note-input:focus { outline: none; border-color: #1666f2; }
+
+.save-mood-btn { 
+    background: #1666f2; 
+    color: white; 
+    border: none; 
+    border-radius: 8px; 
+    padding: 12px 24px; 
+    font-size: 16px; 
+    font-weight: 600; 
+    cursor: pointer; 
+    width: 100%; 
+    transition: all 0.3s ease; 
+}
+
+.save-mood-btn:hover { background: #1258d4; }
