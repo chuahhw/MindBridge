@@ -42,3 +42,5 @@ MindBridge is a **Spring Boot web application** for student and counselor manage
 ```bash
 git clone https://github.com/yourusername/mindbridge.git
 cd mindbridge
+
+2. mvn spring-boot:run
