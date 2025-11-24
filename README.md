@@ -39,8 +39,8 @@ MindBridge is a **Spring Boot web application** for student and counselor manage
 ## Setup & Installation
 
 1. **Clone the repository**
-git clone https://github.com/yourusername/mindbridge.git
-cd mindbridge
+- git clone https://github.com/yourusername/mindbridge.git
+- cd mindbridge
 
 
 3. **Run The App**
