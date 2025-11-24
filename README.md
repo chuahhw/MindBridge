@@ -44,4 +44,4 @@ MindBridge is a **Spring Boot web application** for student and counselor manage
 
 
 3. **Run The App**
-mvn spring-boot:run
+- mvn spring-boot:run
