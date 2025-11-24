@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MindBridge - Login</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 15px rgba(0,0,0,0.1);
+            width: 360px;
+        }
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .login-container form {
+            display: flex;
+            flex-direction: column;
+        }
+        .login-container label {
+            margin: 10px 0 5px;
+            font-size: 14px;
+            color: #555;
+        }
+        .login-container input {
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .login-container button {
+            margin-top: 20px;
+            padding: 12px;
+            background-color: #2563eb;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .login-container button:hover {
+            background-color: #1d4ed8;
+        }
+        .login-container .signup-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+        .login-container .signup-link a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+        .login-container .signup-link a:hover {
+            text-decoration: underline;
+        }
+        .login-container .demo-box {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f0f4f8;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #333;
+        }
+        .error-message {
+            color: #d32f2f;
+            background-color: #ffebee;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <h2>Mental Health Literacy Hub</h2>
+    <p style="text-align: center; margin-bottom: 20px;">Login to your account</p>
+
+    <!-- Error message for login failure -->
+    <div th:if="${param.error}" class="error-message">
+        Invalid username or password.
+    </div>
+    
+    <div th:if="${param.logout}" class="error-message" style="color: #2e7d32; background-color: #e8f5e8;">
+        You have been logged out successfully.
+    </div>
+
+    <!-- Spring Security expects these exact parameter names -->
+    <form th:action="@{/login}" method="post">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <div class="signup-link">
+        <a th:href="@{/register}">Create new account</a>
+    </div>
+</div>
+
+</body>
+</html>

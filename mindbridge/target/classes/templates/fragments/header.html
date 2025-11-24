@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+</head>
+<body>
+    <!-- Header Fragment -->
+    <div th:fragment="header">
+        <!-- Top Navigation - Header Only -->
+        <nav class="navbar">
+            <div class="navbar-container">
+                <a class="navbar-brand" th:href="@{/student/dashboard}">Digital Mental Health Hub</a>
+                <div class="user-section">
+                    <span class="username" th:text="${studentName}"></span>
+                    <form th:action="@{/logout}" method="post" style="display: inline;">
+                        <button class="logout-btn" type="submit">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </div>
+</body>
+</html>

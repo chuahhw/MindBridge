@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+</head>
+<body>
+    <!-- Menu Tabs Fragment -->
+    <div th:fragment="menu(activePage)">
+        <!-- Menu Tabs -->
+        <div class="menu-tabs">
+            <div class="tabs-container">
+                <ul class="nav-tabs">
+                    <li>
+                        <a th:class="${activePage == 'dashboard' ? 'nav-link active' : 'nav-link'}" 
+                           th:href="@{/counselor/dashboard}">Dashboard</a>
+                    </li>
+                    <li>
+                        <a th:class="${activePage == 'appointment' ? 'nav-link active' : 'nav-link'}" 
+                           th:href="@{/appointment}">Appointment</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
