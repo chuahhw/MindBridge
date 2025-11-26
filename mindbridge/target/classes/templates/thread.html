@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${thread.title} + ' - Forum'">Thread - Forum</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <!-- Dynamic Header based on role -->
+    <div th:if="${user.role == 'STUDENT'}" th:replace="~{fragments/header :: header}"></div>
+    <div th:if="${user.role == 'COUNSELOR'}" th:replace="~{fragments/header :: header}"></div>
+    
+    <!-- Dynamic Menu based on role -->
+    <div th:if="${user.role == 'STUDENT'}" th:replace="~{fragments/menu :: menu('forum')}"></div>
+    <div th:if="${user.role == 'COUNSELOR'}" th:replace="~{fragments/counselor-menu :: menu('forum')}"></div>
+
+    <main class="container mx-auto px-4 py-6">
+        <div class="flex justify-between items-center mb-6">
+            <a th:href="@{/forum}" class="text-blue-600 hover:text-blue-800 mb-4 inline-block">
+                ← Back to Forum
+            </a>
+            <div th:if="${isCounselor}" class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                Counselor View
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+            <!-- Main Thread -->
+            <div class="border-b border-gray-200 pb-6 mb-6">
+                <div class="flex justify-between items-start mb-4">
+                    <h1 class="text-2xl font-bold text-gray-900" th:text="${thread.title}">Thread Title</h1>
+                    <span class="text-sm text-gray-500" th:text="${#temporals.format(thread.createdAt, 'MMM dd, yyyy HH:mm')}">
+                        Date
+                    </span>
+                </div>
+                
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="font-medium text-gray-900" th:text="${thread.createdBy.fullName}">Author</span>
+                    <span th:if="${thread.createdBy.role == 'COUNSELOR'}" 
+                          class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-medium">
+                        Counselor
+                    </span>
+                    <span th:if="${thread.createdBy.role == 'STUDENT'}" 
+                          class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-medium">
+                        Student
+                    </span>
+                </div>
+                
+                <p class="text-gray-700 whitespace-pre-line" th:text="${thread.content}">
+                    Thread content...
+                </p>
+            </div>
+
+            <!-- Replies Section -->
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold mb-4" th:text="${thread.replies.size()} + ' Replies'">Replies</h3>
+                
+                <div th:each="reply : ${thread.replies}" class="border-l-4 border-blue-200 pl-4 mb-6">
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="flex items-center gap-2">
+                            <span class="font-medium text-gray-900" th:text="${reply.createdBy.fullName}">User</span>
+                            <span th:if="${reply.createdBy.role == 'COUNSELOR'}" 
+                                  class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-medium">
+                                Counselor
+                            </span>
+                            <span th:if="${reply.createdBy.role == 'STUDENT'}" 
+                                  class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-medium">
+                                Student
+                            </span>
+                        </div>
+                        <span class="text-sm text-gray-500" th:text="${#temporals.format(reply.createdAt, 'MMM dd, yyyy HH:mm')}">
+                            Date
+                        </span>
+                    </div>
+                    <p class="text-gray-700 whitespace-pre-line" th:text="${reply.content}">
+                        Reply content...
+                    </p>
+                </div>
+
+                <div th:if="${thread.replies.empty}" class="text-center py-8 text-gray-500">
+                    No replies yet. Be the first to respond!
+                </div>
+            </div>
+
+            <!-- Reply Form -->
+            <div class="border-t border-gray-200 pt-6">
+                <h3 class="text-xl font-semibold mb-4">Post a Reply</h3>
+                <form th:action="@{/forum/thread/{id}/reply(id=${thread.id})}" method="post" class="space-y-4">
+                    <div>
+                        <textarea name="content" placeholder="Write your reply..." rows="4"
+                                  class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                  required></textarea>
+                    </div>
+                    <button type="submit" 
+                            class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
+                        Post Reply
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

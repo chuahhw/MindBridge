@@ -1,12 +1,14 @@
 package com.example.mindbridge.service;
 
-import com.example.mindbridge.model.Counselor;
-import com.example.mindbridge.model.User;
-import com.example.mindbridge.repository.UserRepository;
+import java.util.Optional;
+
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import com.example.mindbridge.model.Counselor;
+import com.example.mindbridge.model.User;
+import com.example.mindbridge.repository.UserRepository;
 
 @Service
 public class UserService {
@@ -38,5 +40,16 @@ public class UserService {
 
     public Optional<Counselor> getCounselorByUsername(String username) {
         return userRepository.findCounselorByUsername(username);
+    }
+
+    public User getLoggedInUser(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new RuntimeException("No authenticated user found");
+        }
+
+        String username = authentication.getName();
+
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found: " + username));
     }
 }

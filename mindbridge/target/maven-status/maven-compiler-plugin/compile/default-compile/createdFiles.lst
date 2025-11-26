@@ -1,6 +1,6 @@
 com\example\mindbridge\controller\AuthController.class
-com\example\mindbridge\controller\RegisterController.class
-com\example\mindbridge\repository\UserRepository.class
 com\example\mindbridge\MindBridgeApplication.class
 com\example\mindbridge\model\User.class
+com\example\mindbridge\controller\RegisterController.class
+com\example\mindbridge\repository\UserRepository.class
 com\example\mindbridge\service\UserService.class
