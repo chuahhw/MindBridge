@@ -1,10 +1,9 @@
 package com.example.mindbridge.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
@@ -18,7 +17,9 @@ public class SecurityConfig {
                 .requestMatchers("/register", "/login", "/css/**", "/js/**").permitAll()
                 .requestMatchers("/counselor/**").hasRole("COUNSELOR")
                 .requestMatchers("/student/**").hasRole("STUDENT")
+                .requestMatchers("/forum/**").hasAnyRole("STUDENT", "COUNSELOR")
                 .anyRequest().authenticated()
+                
             )
             .formLogin(form -> form
                 .loginPage("/login")
