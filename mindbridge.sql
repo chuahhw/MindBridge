@@ -75,8 +75,10 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `full_name`, `username`, `email`, `student_id`, `department`, `password`, `user_type`, `role`) VALUES
 (1, 'Siti', 'counselorSiti', 'siti@gmail.com', NULL, NULL, '$2a$10$Utp8PZS5gNsnSYup66K3YuKPVoyau45cxBp7abZLxs/oEg4v7dk9K', 'COUNSELOR', 'COUNSELOR'),
 (2, 'Chuah Hui Wen', 'chuahhw', 'chwen0912@gmail.com', 'A23CS0219', 'Computer Science', '$2a$10$bPhH9EfPgWXfVbVNpxCjgOclVx9iPn50zzIboe4menRLAPuXTieDm', 'STUDENT', 'STUDENT'),
-(3, 'Ali', 'adminAli', 'ali@gmail.com', NULL, NULL, '$2a$10$D1Bc/XArwIiwRr9QGZLbGuiZmIV6ZIodr47S1247VtbnscjPM1am.', 'ADMIN', 'ADMIN');
-
+(3, 'Ali', 'adminAli', 'ali@gmail.com', NULL, NULL, '$2a$10$D1Bc/XArwIiwRr9QGZLbGuiZmIV6ZIodr47S1247VtbnscjPM1am.', 'ADMIN', 'ADMIN'),
+(4, 'MichaelChen', 'counselorMichael', 'michael@gmail.com', NULL, NULL, '$2a$10$Utp8PZS5gNsnSYup66K3YuKPVoyau45cxBp7abZLxs/oEg4v7dk9K', 'COUNSELOR', 'COUNSELOR'),
+(5, 'SarahWilliams', 'counselorSarah', 'sarah@gmail.com', NULL, NULL, '$2a$10$Utp8PZS5gNsnSYup66K3YuKPVoyau45cxBp7abZLxs/oEg4v7dk9K', 'COUNSELOR', 'COUNSELOR'),
+(6, 'JamesRod', 'counselorJames', 'james@gmail.com', NULL, NULL, '$2a$10$Utp8PZS5gNsnSYup66K3YuKPVoyau45cxBp7abZLxs/oEg4v7dk9K', 'COUNSELOR', 'COUNSELOR');
 --
 -- Indexes for dumped tables
 --
@@ -108,7 +110,7 @@ ALTER TABLE `mood_entries`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- Constraints for dumped tables
 --

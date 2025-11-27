@@ -50,10 +50,10 @@ public class ForumController {
 
     // Create new thread - both roles can create
     @PostMapping("/forum/thread")
-    public String createThread(@RequestParam String title,
-                               @RequestParam String content,
+    public String createThread(@RequestParam String title, 
+                              @RequestParam String content,
                                @RequestParam(name = "anonymous", defaultValue = "false") boolean anonymous,
-                               Authentication authentication) {
+                              Authentication authentication) {
         User user = userService.getLoggedInUser(authentication);
         forumService.createThread(title, content, user, anonymous);
         return "redirect:/forum";

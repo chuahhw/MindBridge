@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Appointments - Mental Health Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background: #f5f5f5; 
+            padding: 0;
+            margin: 0;
+        }
+        
+        /* HEADER */
+        .header {
+            background: #2563eb;
+            padding: 20px 0;
+            color: white;
+        }
+        
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 600;
+        }
+        
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .username {
+            font-size: 15px;
+        }
+        
+        .logout-btn {
+            background: white;
+            color: #2563eb;
+            padding: 8px 20px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        .logout-btn:hover {
+            background: #f0f9ff;
+            color: #2563eb;
+        }
+        
+        /* NAVIGATION */
+        .navigation {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 0;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            gap: 0;
+            justify-content: center;
+        }
+        
+        .nav-link {
+            padding: 16px 24px;
+            color: #6b7280;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        
+        .nav-link:hover {
+            color: #2563eb;
+        }
+        
+        .nav-link.active {
+            color: #2563eb;
+            border-bottom-color: #2563eb;
+        }
+        
+        /* MAIN CONTENT */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .page-title {
+            font-size: 24px;
+            color: #1f2937;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+        
+        /* BOOK BUTTON */
+        .book-button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .book-button:hover {
+            background: #1d4ed8;
+        }
+        
+        /* APPOINTMENTS SECTION */
+        .appointments-section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-size: 20px;
+            color: #1f2937;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        /* APPOINTMENT CARD */
+        .appointment-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            background: white;
+        }
+        
+        .appointment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 12px;
+        }
+        
+        .counselor-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            margin: 0;
+        }
+        
+        .status-badge {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        .status-badge.approved {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-badge.completed {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .status-badge.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-badge.declined {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .appointment-details {
+            color: #6b7280;
+            font-size: 15px;
+            margin: 6px 0;
+        }
+        
+        .appointment-note {
+            margin-top: 12px;
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #4b5563;
+            font-style: italic;
+        }
+        
+        .appointment-note strong {
+            font-style: normal;
+            color: #1f2937;
+        }
+        
+        .decline-reason {
+            margin-top: 12px;
+            padding: 12px;
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .decline-reason strong {
+            color: #991b1b;
+            display: block;
+            margin-bottom: 4px;
+        }
+        
+        .decline-reason p {
+            color: #7f1d1d;
+            margin: 0;
+        }
+        
+        .join-button {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        
+        .join-button:hover {
+            background: #059669;
+        }
+        
+        /* COUNSELOR CARDS */
+        .counselor-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            background: white;
+        }
+        
+        .counselor-card-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            margin: 0 0 8px 0;
+        }
+        
+        .counselor-card-specialty {
+            font-size: 15px;
+            color: #6b7280;
+            margin-bottom: 6px;
+        }
+        
+        .counselor-card-availability {
+            font-size: 14px;
+            color: #9ca3af;
+            margin: 0;
+        }
+        
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #9ca3af;
+        }
+        
+        .empty-state i {
+            font-size: 64px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+        
+        .empty-state p {
+            font-size: 16px;
+            margin: 0;
+        }
+        
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.show {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .modal-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1f2937;
+            margin: 0;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #9ca3af;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+        }
+        
+        .close-btn:hover {
+            color: #4b5563;
+        }
+        
+        .modal-body {
+            padding: 25px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151;
+            font-size: 14px;
+        }
+        
+        .form-label .required {
+            color: #ef4444;
+        }
+        
+        .counselor-option {
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: start;
+            gap: 12px;
+        }
+        
+        .counselor-option:hover {
+            border-color: #2563eb;
+            background: #f0f9ff;
+        }
+        
+        .counselor-option input[type="radio"] {
+            margin-top: 3px;
+        }
+        
+        .counselor-info h4 {
+            margin: 0 0 4px 0;
+            font-size: 16px;
+            color: #1f2937;
+        }
+        
+        .counselor-info .specialty {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        
+        .counselor-info .availability {
+            color: #9ca3af;
+            font-size: 13px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .session-types {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .session-option {
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: start;
+            gap: 10px;
+        }
+        
+        .session-option:hover {
+            border-color: #2563eb;
+            background: #f0f9ff;
+        }
+        
+        .session-option input[type="radio"]:checked + .session-info {
+            color: #2563eb;
+        }
+        
+        .session-info h5 {
+            margin: 0 0 4px 0;
+            font-size: 15px;
+            color: #1f2937;
+        }
+        
+        .session-info .description {
+            color: #6b7280;
+            font-size: 13px;
+            margin: 0;
+        }
+        
+        .modal-footer {
+            padding: 20px 25px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        
+        .btn-cancel {
+            background: #f3f4f6;
+            color: #4b5563;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .btn-cancel:hover {
+            background: #e5e7eb;
+        }
+        
+        .btn-submit {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .btn-submit:hover {
+            background: #1d4ed8;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-container">
+            <h1>Digital Mental Health Hub</h1>
+            <div class="user-section">
+                <span class="username" th:text="${studentName}">Chuah Hui Wen</span>
+                <a th:href="@{/logout}" class="logout-btn">Logout</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Navigation -->
+    <div class="navigation">
+        <div class="nav-container">
+            <a th:href="@{/student/dashboard}" class="nav-link">Home</a>
+            <a th:href="@{/learning}" class="nav-link">Learning</a>
+            <a th:href="@{/assessment}" class="nav-link">Assessment</a>
+            <a th:href="@{/mood-tracker}" class="nav-link">Mood Tracker</a>
+            <a th:href="@{/forum}" class="nav-link">Forum</a>
+            <a th:href="@{/student/appointments}" class="nav-link active">Appointments</a>
+            <a th:href="@{/student/profile}" class="nav-link">Profile</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h2 class="page-title">Telecounseling Appointments</h2>
+        
+        <!-- Book New Appointment Button -->
+        <button class="book-button" onclick="openModal()">
+            <i class="fas fa-plus-circle"></i>
+            Book New Appointment
+        </button>
+        
+        <!-- My Appointments Section -->
+        <div class="appointments-section">
+            <h3 class="section-title">My Appointments</h3>
+            
+            <!-- If no appointments -->
+            <div th:if="${#lists.isEmpty(appointments)}" class="empty-state">
+                <i class="fas fa-calendar-times"></i>
+                <p>No appointments found.</p>
+            </div>
+            
+            <!-- Appointment Cards -->
+            <div th:each="appointment : ${appointments}">
+                <div class="appointment-card">
+                    <div class="appointment-header">
+                        <h4 class="counselor-name" th:text="${appointment.counselor.fullName}">Dr. Michael Chen</h4>
+                        <span class="status-badge" 
+                            th:classappend="${appointment.status == 'APPROVED' ? 'approved' : 
+                                            appointment.status == 'COMPLETED' ? 'completed' : 
+                                            appointment.status == 'PENDING' ? 'pending' : 
+                                            appointment.status == 'DECLINED' ? 'declined' : ''}">
+                            <span th:text="${appointment.status}">Approved</span>
+                        </span>
+                    </div>
+                    
+                    <div class="appointment-details">
+                        <span th:text="${#temporals.format(appointment.date, 'M/d/yyyy')}">11/10/2025</span>
+                        at
+                        <span th:text="${#temporals.format(appointment.time, 'hh:mm a')}">02:00 PM</span>
+                    </div>
+                    
+                    <div class="appointment-details" th:text="${appointment.type.replace('_', ' ')}">Video Call</div>
+                    
+                    <div th:if="${appointment.notes}" class="appointment-note">
+                        <strong>Your note:</strong> <span th:text="${appointment.notes}">Initial consultation</span>
+                    </div>
+                    
+                    <!-- Show decline reason if appointment was declined -->
+                    <div th:if="${appointment.status == 'DECLINED' && appointment.declineReason}" class="decline-reason">
+                        <strong>Reason for decline:</strong>
+                        <p th:text="${appointment.declineReason}">Counselor is not available at the selected time</p>
+                    </div>
+                    
+                    <!-- Show Join Button only for approved appointments -->
+                    <button th:if="${appointment.status == 'APPROVED'}" class="join-button">
+                        <i class="fas fa-video"></i> Join Video Call
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Our Counseling Team Section -->
+        <div class="appointments-section" style="margin-top: 30px;">
+            <h3 class="section-title">Our Counseling Team</h3>
+            
+            <div th:each="counselor : ${counselors}" class="counselor-card">
+                <h4 class="counselor-card-name" th:text="${counselor.fullName}">Dr. Michael Chen</h4>
+                <div class="counselor-card-specialty" th:text="${counselor.specialty}">Clinical Psychology</div>
+                <div class="counselor-card-availability" th:text="'Available: ' + ${counselor.availability}">Available: Mon, Wed, Fri</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Book Appointment Modal -->
+    <div id="bookModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Book Appointment</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            
+            <form th:action="@{/student/appointments}" method="post">
+                <div class="modal-body">
+                    <!-- Select Counselor -->
+                    <div class="form-group">
+                        <label class="form-label">Select Counselor <span class="required">*</span></label>
+                        
+                        <div th:each="counselor : ${counselors}" class="counselor-option">
+                            <input type="radio" name="counselorId" th:value="${counselor.id}" required>
+                            <div class="counselor-info">
+                                <h4 th:text="${counselor.fullName}">Dr. Michael Chen</h4>
+                                <div class="specialty" th:text="${counselor.specialty}">Clinical Psychology</div>
+                                <div class="availability" th:text="'Available: ' + ${counselor.availability}">Available: Mon, Wed, Fri</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Date and Time -->
+                    <div class="form-group">
+                        <label class="form-label">Date <span class="required">*</span></label>
+                        <input type="date" name="date" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Time <span class="required">*</span></label>
+                        <select name="time" class="form-control" required>
+                            <option value="">Select time</option>
+                            <option value="09:00">09:00 AM</option>
+                            <option value="10:00">10:00 AM</option>
+                            <option value="11:00">11:00 AM</option>
+                            <option value="14:00">02:00 PM</option>
+                            <option value="15:00">03:00 PM</option>
+                            <option value="16:00">04:00 PM</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Session Type -->
+                    <div class="form-group">
+                        <label class="form-label">Session Type <span class="required">*</span></label>
+                        
+                        <div class="session-types">
+                            <div class="session-option">
+                                <input type="radio" name="type" value="VIDEO_CALL" id="video" required>
+                                <label for="video" class="session-info">
+                                    <h5>Video Call</h5>
+                                    <p class="description">Online session</p>
+                                </label>
+                            </div>
+                            
+                            <div class="session-option">
+                                <input type="radio" name="type" value="IN_PERSON" id="inperson">
+                                <label for="inperson" class="session-info">
+                                    <h5>In-Person</h5>
+                                    <p class="description">Campus office</p>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Notes -->
+                    <div class="form-group">
+                        <label class="form-label">Notes (Optional)</label>
+                        <textarea name="notes" class="form-control" rows="3" placeholder="Briefly describe what you'd like to discuss..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn-submit">Book Appointment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openModal() {
+            document.getElementById('bookModal').classList.add('show');
+        }
+        
+        function closeModal() {
+            document.getElementById('bookModal').classList.remove('show');
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('bookModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
