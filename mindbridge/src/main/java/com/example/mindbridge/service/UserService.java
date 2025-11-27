@@ -1,5 +1,6 @@
 package com.example.mindbridge.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.security.core.Authentication;
@@ -19,6 +20,21 @@ public class UserService {
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    // REMOVE these interface-like declarations:
+    // List<User> getAllCounselors();   ← DELETE THIS LINE
+    // User getUserById(Long id);       ← DELETE THIS LINE
+
+    // Add proper implementations:
+
+    public List<User> getAllCounselors() {
+        return userRepository.findByRole("COUNSELOR");
+    }
+
+    public User getUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
     }
 
     public User registerUser(User user) {

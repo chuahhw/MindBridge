@@ -5,6 +5,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -29,7 +30,7 @@ public class SecurityConfig {
                 .permitAll()
             )
             .logout(logout -> logout
-                .logoutUrl("/logout")
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))  // ← ADD THIS LINE
                 .logoutSuccessUrl("/login?logout=true")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
@@ -39,14 +40,10 @@ public class SecurityConfig {
         return http.build();
     }
 
-    /**
-     * Role-based redirect after login.
-     * Handles context path automatically.
-     */
     @Bean
     public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
         return (request, response, authentication) -> {
-            String contextPath = request.getContextPath(); // e.g., "/mindbridge"
+            String contextPath = request.getContextPath();
 
             boolean isCounselor = authentication.getAuthorities().stream()
                     .anyMatch(a -> a.getAuthority().equals("ROLE_COUNSELOR"));
