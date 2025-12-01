@@ -37,7 +37,7 @@ public abstract class User {
                 String password, String role) {
         this.fullName = fullName;
         this.username = username;
-        this.email = email;
+        this.email = email;        
         this.studentId = studentId;
         this.department = department;
         this.password = password;
