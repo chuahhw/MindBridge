@@ -12,16 +12,16 @@ public class Counselor extends User {
 
     public Counselor() {
         super();
-        setRole("ROLE_COUNSELOR");
+        setRole("COUNSELOR");
     }
 
     public Counselor(String fullName, String username, String email, String password) {
-        super(fullName, username, email, null, null, password, "ROLE_COUNSELOR");
+        super(fullName, username, email, null, null, password, "COUNSELOR");
     }
 
     public Counselor(String fullName, String username, String email, String password, 
                      String specialty, String availability) {
-        super(fullName, username, email, null, null, password, "ROLE_COUNSELOR");
+        super(fullName, username, email, null, null, password, "COUNSELOR");
         this.specialty = specialty;
         this.availability = availability;
     }

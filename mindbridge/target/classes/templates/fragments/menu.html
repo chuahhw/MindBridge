@@ -17,11 +17,11 @@
                     </li>
                     <li>
                         <a th:class="${activePage == 'learning' ? 'nav-link active' : 'nav-link'}" 
-                           th:href="@{/learning}">Learning</a>
+                           th:href="@{/student/learning}">Learning</a>
                     </li>
                     <li>
-                        <a th:class="${activePage == 'assessment' ? 'nav-link active' : 'nav-link'}" 
-                           th:href="@{/assessment}">Assessment</a>
+                        <a th:class="${activePage == 'assessments' ? 'nav-link active' : 'nav-link'}" 
+                           th:href="@{/student/assessments}">Assessment</a>
                     </li>
                     <li>
                         <a th:class="${activePage == 'mood-tracker' ? 'nav-link active' : 'nav-link'}" 
