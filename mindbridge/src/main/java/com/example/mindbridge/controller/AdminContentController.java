@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.mindbridge.model.LearningModule;
+import com.example.mindbridge.service.ForumService;
 import com.example.mindbridge.service.LearningModuleService;
 
 @Controller
@@ -19,15 +20,18 @@ import com.example.mindbridge.service.LearningModuleService;
 public class AdminContentController {
 
     private final LearningModuleService learningModuleService;
+    private final ForumService forumService;
 
-    public AdminContentController(LearningModuleService learningModuleService) {
+    public AdminContentController(LearningModuleService learningModuleService, ForumService forumService) {
         this.learningModuleService = learningModuleService;
+        this.forumService = forumService;
     }
 
     @GetMapping("/content")
     public String adminContent(Model model) {
         List<LearningModule> modules = learningModuleService.getAllModulesIncludingInactive();
         model.addAttribute("modules", modules);
+        model.addAttribute("threads", forumService.getAllThreads());
         return "admin-content";
     }
 
@@ -86,6 +90,17 @@ public class AdminContentController {
             LearningModule module = learningModuleService.getModuleById(id); // This allows inactive modules to be retrieved
             module.setActive(false);
             learningModuleService.updateModule(module);
+            return "redirect:/admin/content";
+        } catch (Exception e) {
+            // Handle error - could add error message
+            return "redirect:/admin/content";
+        }
+    }
+
+    @DeleteMapping("/content/forum/{id}")
+    public String deleteForumThread(@PathVariable Long id) {
+        try {
+            forumService.deleteThread(id);
             return "redirect:/admin/content";
         } catch (Exception e) {
             // Handle error - could add error message
