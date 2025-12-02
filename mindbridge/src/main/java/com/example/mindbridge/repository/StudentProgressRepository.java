@@ -3,9 +3,9 @@ package com.example.mindbridge.repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.example.mindbridge.model.LearningModule;
@@ -34,4 +34,8 @@ public interface StudentProgressRepository extends JpaRepository<StudentProgress
     @Query("SELECT p FROM StudentProgress p WHERE p.student = :student AND p.module.id = :moduleId")
     Optional<StudentProgress> findByStudentAndModuleId(
             @Param("student") Student student, @Param("moduleId") Long moduleId);
+
+    // Find recent completed modules across all students
+    @Query("SELECT p FROM StudentProgress p WHERE p.completed = true AND p.completedAt IS NOT NULL ORDER BY p.completedAt DESC")
+    List<StudentProgress> findRecentCompletedModules();
 }

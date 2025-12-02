@@ -12,7 +12,12 @@ import com.example.mindbridge.model.ForumThread;
 public interface ForumThreadRepository extends JpaRepository<ForumThread, Long> {
     
     List<ForumThread> findAllByOrderByCreatedAtDesc();
-    
+
+    // Find recent forum threads (alias for the existing method)
+    default List<ForumThread> findRecentForumThreads() {
+        return findAllByOrderByCreatedAtDesc();
+    }
+
     @Query("SELECT t FROM ForumThread t LEFT JOIN FETCH t.replies WHERE t.id = :id")
     ForumThread findByIdWithReplies(Long id);
 }

@@ -68,4 +68,22 @@ public class UserService {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found: " + username));
     }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public void deleteUserById(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new RuntimeException("User not found with id: " + id);
+        }
+        userRepository.deleteById(id);
+    }
+
+    public User updateUser(User user) {
+        if (!userRepository.existsById(user.getId())) {
+            throw new RuntimeException("User not found with id: " + user.getId());
+        }
+        return userRepository.save(user);
+    }
 }

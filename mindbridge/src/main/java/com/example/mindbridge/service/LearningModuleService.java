@@ -246,4 +246,44 @@ public Optional<StudentProgress> getModuleProgress(Student student, Long moduleI
             throw new RuntimeException("Could not save module: " + e.getMessage(), e);
         }
     }
+
+    @Transactional
+    public LearningModule updateModule(LearningModule module) {
+        try {
+            if (module.getId() == null) {
+                throw new IllegalArgumentException("Module ID must not be null for update");
+            }
+            LearningModule saved = moduleRepository.save(module);
+            logger.info("Updated module: {}", saved.getTitle());
+            return saved;
+        } catch (Exception e) {
+            logger.error("Error updating module with ID {}", module.getId(), e);
+            throw new RuntimeException("Could not update module: " + e.getMessage(), e);
+        }
+    }
+
+    @Transactional
+    public void deleteModule(Long moduleId) {
+        try {
+            LearningModule module = getModuleById(moduleId);
+            module.setActive(false);
+            moduleRepository.save(module);
+            logger.info("Soft deleted module: {}", module.getTitle());
+        } catch (Exception e) {
+            logger.error("Error deleting module with ID {}", moduleId, e);
+            throw new RuntimeException("Could not delete module: " + e.getMessage(), e);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public List<LearningModule> getAllModulesIncludingInactive() {
+        try {
+            List<LearningModule> modules = moduleRepository.findAll();
+            logger.info("Found {} total modules (including inactive)", modules.size());
+            return modules;
+        } catch (Exception e) {
+            logger.error("Error fetching all modules", e);
+            return Collections.emptyList();
+        }
+    }
 }

@@ -48,8 +48,16 @@ public class ForumServiceImpl implements ForumService {
     public ForumReply addReply(Long threadId, String content, User user) {
         ForumThread thread = threadRepository.findById(threadId)
                 .orElseThrow(() -> new RuntimeException("Thread not found"));
-        
+
         ForumReply reply = new ForumReply(content, user, thread);
         return replyRepository.save(reply);
+    }
+
+    @Override
+    public void deleteThread(Long id) {
+        if (!threadRepository.existsById(id)) {
+            throw new RuntimeException("Thread not found");
+        }
+        threadRepository.deleteById(id);
     }
 }

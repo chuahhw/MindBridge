@@ -222,7 +222,7 @@
     <div th:replace="~{fragments/admin-header :: header}"></div>
     
     <!-- Include Menu with active page parameter -->
-    <div th:replace="~{fragments/admin-menu :: menu('mood-tracker')}"></div>
+    <div th:replace="~{fragments/admin-menu :: menu('dashboard')}"></div>
 
     <div class="container">
         <h2>System Overview</h2>
@@ -250,17 +250,12 @@
             <div>
                 <div class="content-card">
                     <h3>Recent Activity</h3>
-                    <div class="activity-item">
-                        <strong>New user registered: John Doe</strong><br>
-                        <span>9 minutes ago</span>
+                    <div th:each="activity : ${recentActivities}" class="activity-item">
+                        <strong th:text="${activity.message}"></strong><br>
+                        <span th:text="${activity.timeAgo}"></span>
                     </div>
-                    <div class="activity-item">
-                        <strong>Learning module completed: Stress Management</strong><br>
-                        <span>12 minutes ago</span>
-                    </div>
-                    <div class="activity-item">
-                        <strong>New appointment booked</strong><br>
-                        <span>24 minutes ago</span>
+                    <div th:if="${#lists.isEmpty(recentActivities)}" class="activity-item">
+                        <em>No recent activity to display</em>
                     </div>
                 </div>
                 

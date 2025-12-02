@@ -12,4 +12,5 @@ public interface ForumService {
     ForumThread createThread(String title, String content, User user, boolean anonymous);
     ForumReply addReply(Long threadId, String content, User user);
     ForumThread likeThread(Long id);
+    void deleteThread(Long id);
 }

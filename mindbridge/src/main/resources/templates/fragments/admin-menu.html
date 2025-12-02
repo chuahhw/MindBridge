@@ -16,16 +16,16 @@
                            th:href="@{/admin/dashboard}">Dashboard</a>
                     </li>
                     <li>
-                        <a th:class="${activePage == 'users' ? 'nav-link active' : 'nav-link'}" 
-                           th:href="@{/users}">Users</a>
+                        <a th:class="${activePage == 'users' ? 'nav-link active' : 'nav-link'}"
+                           th:href="@{/admin/users}">Users</a>
                     </li>
                     <li>
-                        <a th:class="${activePage == 'content' ? 'nav-link active' : 'nav-link'}" 
-                           th:href="@{/content}">Content</a>
+                        <a th:class="${activePage == 'content' ? 'nav-link active' : 'nav-link'}"
+                           th:href="@{/admin/content}">Content</a>
                     </li>
                     <li>
                         <a th:class="${activePage == 'reports' ? 'nav-link active' : 'nav-link'}" 
-                           th:href="@{/reports}">Reports</a>
+                           th:href="@{/admin/reports}">Reports</a>
                     </li>
                 </ul>
             </div>
