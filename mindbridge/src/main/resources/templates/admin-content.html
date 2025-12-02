@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Content Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+            padding: 0;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .content-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .content-card h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #343a40;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        /* NAVBAR (Header) */
+        .navbar {
+            background:#7f1f84;
+            padding:15px 0;
+            border-bottom:none;
+        }
+        .navbar-container {
+            max-width:1200px;
+            margin:auto;
+            padding:0 20px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+        .navbar-brand {
+            font-weight:600;
+            font-size:24px;
+            color:#fff;
+            text-decoration:none;
+        }
+        .user-section { display:flex; align-items:center; gap:15px; }
+        .username { color:#fff; font-size:14px; font-weight:500; }
+        .logout-btn {
+            background:#fff;
+            color:#7f1f84;
+            padding:8px 16px;
+            border-radius:4px;
+            font-weight:600;
+            border:none;
+            cursor:pointer;
+        }
+        .logout-btn:hover { background:#f8f9fa; }
+
+        /* MENU TABS */
+        .menu-tabs {
+            background:#fff;
+            border-bottom:1px solid #dee2e6;
+            padding:15px 0;
+        }
+        .tabs-container {
+            max-width:1200px;
+            margin:auto;
+            padding:0 20px;
+        }
+        .nav-tabs {
+            display:flex;
+            list-style:none;
+            padding:0;
+            margin:0;
+        }
+        .nav-tabs .nav-link {
+            padding:15px 20px;
+            color:#495057;
+            font-weight:500;
+            font-size:14px;
+            text-decoration:none;
+            border:none;
+        }
+        .nav-tabs .nav-link.active {
+            color:#7f1f84;
+            border-bottom:3px solid #7f1f84;
+            font-weight:600;
+        }
+        .nav-tabs .nav-link:hover {
+            color:#7f1f84;
+            background:#f8f9fa;
+        }
+
+        .module-title {
+            font-weight: bold;
+        }
+
+        .module-category {
+            background: #e9ecef;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.875em;
+        }
+
+        .active-status {
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.875em;
+            font-weight: bold;
+        }
+
+        .active-status.active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .active-status.inactive {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <!-- Include Header -->
+    <div th:replace="~{fragments/admin-header :: header}"></div>
+
+    <!-- Include Menu with active page parameter -->
+    <div th:replace="~{fragments/admin-menu :: menu('content')}"></div>
+
+    <div class="container">
+        <div class="content-card">
+            <h2>Content Management</h2>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Duration</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="module : ${modules}">
+                            <td>
+                                <div class="module-title" th:text="${module.title}">Module Title</div>
+                                <small class="text-muted" th:text="${#strings.abbreviate(module.description, 50)}">Description...</small>
+                            </td>
+                            <td><span class="module-category" th:text="${module.category}">Category</span></td>
+                            <td th:text="${module.duration}">Duration</td>
+                            <td>
+                                <span class="active-status" th:classappend="${module.active} ? 'active' : 'inactive'" th:text="${module.active} ? 'Active' : 'Inactive'">Status</span>
+                            </td>
+                            <td>
+                                <a th:href="@{/admin/content/{id}/edit(id=${module.id})}" class="btn btn-sm btn-primary me-1">Edit</a>
+                                <form th:action="@{/admin/content/{id}(id=${module.id})}" method="post" style="display: inline;">
+                                    <input type="hidden" name="_method" value="DELETE" />
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to deactivate this module?')">Deactivate</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Module Modal -->
+    <div class="modal fade" id="editModuleModal" tabindex="-1" aria-labelledby="editModuleModalLabel" aria-hidden="true"
+         th:classappend="${showModal} ? 'show'" th:styleappend="${showModal} ? 'display: block;'" th:data-bs-backdrop="${showModal} ? 'static'">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModuleModalLabel">Edit Module</h5>
+                    <a href="/mindbridge/admin/content" class="btn-close" aria-label="Close"></a>
+                </div>
+                <div class="modal-body">
+                    <!-- Error Message Display -->
+                    <div th:if="${error}" class="alert alert-danger" role="alert">
+                        <span th:text="${error}"></span>
+                    </div>
+
+                    <form th:action="@{/admin/content/{id}/edit(id=${editModule.id})}" method="post" th:if="${editModule}">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="editTitle" class="form-label">Title *</label>
+                                <input type="text" class="form-control" id="editTitle" name="title" th:value="${editModule.title}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editCategory" class="form-label">Category *</label>
+                                <input type="text" class="form-control" id="editCategory" name="category" th:value="${editModule.category}" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editDescription" class="form-label">Description *</label>
+                            <textarea class="form-control" id="editDescription" name="description" rows="3" required th:text="${editModule.description}"></textarea>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="editDuration" class="form-label">Duration</label>
+                                <input type="text" class="form-control" id="editDuration" name="duration" th:value="${editModule.duration}" placeholder="e.g., 30 minutes">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editDisplayOrder" class="form-label">Display Order</label>
+                                <input type="number" class="form-control" id="editDisplayOrder" name="displayOrder" th:value="${editModule.displayOrder}" min="0">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editLearningObjectives" class="form-label">Learning Objectives</label>
+                            <textarea class="form-control" id="editLearningObjectives" name="learningObjectives" rows="3" th:text="${editModule.learningObjectives}" placeholder="One objective per line"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editContent" class="form-label">Content</label>
+                            <textarea class="form-control" id="editContent" name="content" rows="5" th:text="${editModule.content}" placeholder="Module content in HTML or text format"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="editActive" name="active" th:checked="${editModule.active}">
+                                <label class="form-check-label" for="editActive">
+                                    Active (uncheck to deactivate)
+                                </label>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <a href="/mindbridge/admin/content" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

@@ -1,11 +1,13 @@
 package com.example.mindbridge.repository;
 
-import com.example.mindbridge.model.AssessmentAttempt;
-import com.example.mindbridge.model.User;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import java.util.List;
+
+import com.example.mindbridge.model.AssessmentAttempt;
+import com.example.mindbridge.model.User;
 
 public interface AssessmentAttemptRepository extends JpaRepository<AssessmentAttempt, Integer> {
     
@@ -18,4 +20,7 @@ public interface AssessmentAttemptRepository extends JpaRepository<AssessmentAtt
     
     // Method 3: Simple method that should work
     List<AssessmentAttempt> findByUser(User user);
+
+    // Find recent assessment attempts across all users
+    List<AssessmentAttempt> findAllByOrderByAttemptDateDesc();
 }

@@ -30,4 +30,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     // Find appointments for counselor on specific date
     @Query("SELECT a FROM Appointment a WHERE a.counselor = :counselor AND a.date = :date ORDER BY a.time ASC")
     List<Appointment> findByCounselorAndDate(@Param("counselor") User counselor, @Param("date") LocalDate date);
+
+    // Find recent appointments across all users
+    List<Appointment> findAllByOrderByDateDescTimeDesc();
 }
