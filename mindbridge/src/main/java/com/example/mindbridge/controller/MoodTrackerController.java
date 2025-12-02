@@ -55,20 +55,30 @@ public class MoodTrackerController {
     @PostMapping("/mood/save")
     public String addMood(
             @AuthenticationPrincipal UserDetails user,
-            @RequestParam("moodValue") int moodValue,
+            @RequestParam(value = "moodValue", required = false) Integer moodValue,
             @RequestParam(value = "note", required = false) String note) {
 
-        if (user != null) {
+        if (user == null) {
+            return "redirect:/login";
+        }
 
-            studentService.getStudentByUsername(user.getUsername()).ifPresent(student -> {
+        if (moodValue == null) {
+            // No mood selected; redirect back with optional error message
+            return "redirect:/mood-tracker?error=selectMood";
+        }
 
+        studentService.getStudentByUsername(user.getUsername()).ifPresent(student -> {
+            try {
                 // Convert numeric mood to label
                 String moodLabel = convertMoodValue(moodValue);
 
-                moodService.addMood(student, moodLabel, 
-                        (note != null ? note : ""));
-            });
-        }
+                // Add mood entry
+                moodService.addMood(student, moodLabel, (note != null ? note : ""));
+            } catch (Exception e) {
+                // Log exception (optional)
+                System.err.println("Error saving mood: " + e.getMessage());
+            }
+        });
 
         return "redirect:/mood-tracker";
     }

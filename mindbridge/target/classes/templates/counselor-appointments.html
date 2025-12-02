@@ -21,82 +21,70 @@
         
         /* NAVBAR (Header) */
         .navbar {
-            background: #128635;
-            padding: 15px 0;
-            border-bottom: none;
+            background:#128635;
+            padding:15px 0;
+            border-bottom:none;
         }
         .navbar-container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            max-width:1200px;
+            margin:auto;
+            padding:0 20px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
         }
         .navbar-brand {
-            font-weight: 600;
-            font-size: 24px;
-            color: #fff;
-            text-decoration: none;
+            font-weight:600;
+            font-size:24px;
+            color:#fff;
+            text-decoration:none;
         }
-        .user-section { 
-            display: flex; 
-            align-items: center; 
-            gap: 15px; 
-        }
-        .username { 
-            color: #fff; 
-            font-size: 14px; 
-            font-weight: 500; 
-        }
+        .user-section { display:flex; align-items:center; gap:15px; }
+        .username { color:#fff; font-size:14px; font-weight:500; }
         .logout-btn {
-            background: #fff;
-            color: #128635;
-            padding: 8px 16px;
-            border-radius: 4px;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            text-decoration: none;
+            background:#fff;
+            color:#128635;
+            padding:8px 16px;
+            border-radius:4px;
+            font-weight:600;
+            border:none;
+            cursor:pointer;
         }
-        .logout-btn:hover { 
-            background: #f8f9fa;
-            color: #128635;
-        }
+        .logout-btn:hover { background:#f8f9fa; }
 
         /* MENU TABS */
         .menu-tabs {
-            background: #fff;
-            border-bottom: 1px solid #dee2e6;
-            padding: 15px 0;
+            background:#fff;
+            border-bottom:1px solid #dee2e6;
+            padding:15px 0;
         }
         .tabs-container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 0 20px;
+            max-width:1200px;
+            margin:auto;
+            padding:0 20px;
         }
         .nav-tabs {
-            display: flex;
-            list-style: none;
-            padding: 0;
-            margin: 0;
+            display:flex;
+            list-style:none;
+            padding:0;
+            margin:0;
         }
         .nav-tabs .nav-link {
-            padding: 15px 20px;
-            color: #495057;
-            font-weight: 500;
-            font-size: 14px;
-            text-decoration: none;
-            border: none;
+            padding:15px 20px;
+            color:#495057;
+            font-weight:500;
+            font-size:14px;
+            text-decoration:none;
+            border:none;
         }
         .nav-tabs .nav-link.active {
-            color: #128635;
-            border-bottom: 3px solid #128635;
-            font-weight: 600;
+            color:#128635;
+            border-bottom:3px solid #128635;
+            font-weight:600;
         }
         .nav-tabs .nav-link:hover {
-            color: #128635;
-            background: #f8f9fa;
+            color:#128635;
+            background:#f8f9fa;
         }
         
         /* PAGE HEADER */
@@ -322,26 +310,11 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <div class="navbar">
-        <div class="navbar-container">
-            <a href="#" class="navbar-brand">Counselor Portal</a>
-            <div class="user-section">
-                <span class="username" th:text="${counselorName}">Dr. Sarah Smith</span>
-                <a th:href="@{/logout}" class="logout-btn">Logout</a>
-            </div>
-        </div>
-    </div>
+    <!-- Include Header -->
+    <div th:replace="~{fragments/counselor-header :: header}"></div>
     
-    <!-- Menu Tabs -->
-    <div class="menu-tabs">
-        <div class="tabs-container">
-            <div class="nav-tabs">
-                <a th:href="@{/counselor/dashboard}" class="nav-link">Dashboard</a>
-                <a th:href="@{/counselor/appointments}" class="nav-link active">Appointments</a>
-            </div>
-        </div>
-    </div>
+    <!-- Include Menu with active page parameter -->
+    <div th:replace="~{fragments/counselor-menu :: menu('appointment')}"></div>
 
     <!-- Main Content -->
     <div class="container">

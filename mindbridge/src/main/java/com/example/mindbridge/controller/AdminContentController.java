@@ -1,5 +1,6 @@
 package com.example.mindbridge.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.mindbridge.model.ForumThread;
 import com.example.mindbridge.model.LearningModule;
 import com.example.mindbridge.service.ForumService;
 import com.example.mindbridge.service.LearningModuleService;
@@ -30,8 +32,14 @@ public class AdminContentController {
     @GetMapping("/content")
     public String adminContent(Model model) {
         List<LearningModule> modules = learningModuleService.getAllModulesIncludingInactive();
+        if (modules == null) modules = new ArrayList<>();
+
+        List<ForumThread> threads = forumService.getAllThreads();
+        if (threads == null) threads = new ArrayList<>();
+
         model.addAttribute("modules", modules);
-        model.addAttribute("threads", forumService.getAllThreads());
+        model.addAttribute("threads", threads);
+
         return "admin-content";
     }
 

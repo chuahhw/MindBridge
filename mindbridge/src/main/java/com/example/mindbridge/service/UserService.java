@@ -22,12 +22,6 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // REMOVE these interface-like declarations:
-    // List<User> getAllCounselors();   ← DELETE THIS LINE
-    // User getUserById(Long id);       ← DELETE THIS LINE
-
-    // Add proper implementations:
-
     public List<User> getAllCounselors() {
         return userRepository.findByRole("COUNSELOR");
     }
@@ -85,5 +79,9 @@ public class UserService {
             throw new RuntimeException("User not found with id: " + user.getId());
         }
         return userRepository.save(user);
+    }
+
+    public Optional<User> getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 }

@@ -21,6 +21,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByStudentId(String studentId);
 
     List<User> findByRole(String role);
+
+    long countByRole(String role);
     
     // Fetch only counselors (subclass of User)
     @Query("SELECT c FROM Counselor c WHERE c.username = :username")

@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import com.example.mindbridge.model.Admin;
 import com.example.mindbridge.model.Counselor;
 import com.example.mindbridge.model.Student;
@@ -18,6 +21,19 @@ import com.example.mindbridge.model.User;
 import com.example.mindbridge.repository.UserRepository;
 import com.example.mindbridge.service.AdminDashboardService;
 import com.example.mindbridge.service.UserService;
+import com.example.mindbridge.model.Appointment;
+import com.example.mindbridge.model.AssessmentAttempt;
+import com.example.mindbridge.model.ForumReply;
+import com.example.mindbridge.model.ForumThread;
+import com.example.mindbridge.model.MoodEntry;
+import com.example.mindbridge.model.QuestionSet;
+import com.example.mindbridge.model.User;
+import com.example.mindbridge.repository.AppointmentRepository;
+import com.example.mindbridge.repository.AssessmentAttemptRepository;
+import com.example.mindbridge.repository.ForumReplyRepository;
+import com.example.mindbridge.repository.ForumThreadRepository;
+import com.example.mindbridge.repository.MoodEntryRepository;
+import com.example.mindbridge.repository.QuestionSetRepository;
 
 @Controller
 @RequestMapping("/admin")
@@ -26,18 +42,63 @@ public class AdminController {
     private final UserService userService;
     private final UserRepository userRepository;
     private final AdminDashboardService adminDashboardService;
+    private final AssessmentAttemptRepository assessmentAttemptRepository;
+    private final MoodEntryRepository moodEntryRepository;
+    private final ForumThreadRepository forumThreadRepository;
+    private final ForumReplyRepository forumReplyRepository;
+    private final AppointmentRepository appointmentRepository;
+    private final QuestionSetRepository questionSetRepository;
 
-    public AdminController(UserService userService, UserRepository userRepository, AdminDashboardService adminDashboardService) {
-        this.userService = userService;
-        this.userRepository = userRepository;
-        this.adminDashboardService = adminDashboardService;
+    public AdminController(UserService userService, UserRepository userRepository, AdminDashboardService adminDashboardService,
+            AssessmentAttemptRepository assessmentAttemptRepository,
+            MoodEntryRepository moodEntryRepository,
+            ForumThreadRepository forumThreadRepository,
+            ForumReplyRepository forumReplyRepository,
+            AppointmentRepository appointmentRepository,
+            QuestionSetRepository questionSetRepository) {
+            this.userRepository = userRepository;
+            this.assessmentAttemptRepository = assessmentAttemptRepository;
+            this.moodEntryRepository = moodEntryRepository;
+            this.forumThreadRepository = forumThreadRepository;
+            this.forumReplyRepository = forumReplyRepository;
+            this.appointmentRepository = appointmentRepository;
+            this.questionSetRepository = questionSetRepository;
+            this.userService = userService;
+            this.adminDashboardService = adminDashboardService;
     }
 
     @GetMapping("/dashboard")
     public String adminDashboard(Model model) {
-        var recentActivities = adminDashboardService.getRecentActivities(10);
-        model.addAttribute("recentActivities", recentActivities);
-        return "admin-dashboard";
+        long totalCompletedAssessments = assessmentAttemptRepository.count();
+        long totalMoodEntries = moodEntryRepository.count();
+        long totalForumThreads = forumThreadRepository.count();
+        long totalForumReplies = forumReplyRepository.count();
+        long totalForumPosts = totalForumThreads + totalForumReplies;
+        long totalAppointments = appointmentRepository.count();
+        long totalUsers = userRepository.findByRole("STUDENT").size() +
+                         userRepository.findByRole("COUNSELOR").size() +
+                         userRepository.findByRole("ADMIN").size();
+
+        // Assessment Summary
+        List<QuestionSet> questionSets = questionSetRepository.findAll();
+        Map<String, Object> assessmentSummary = new HashMap<>();
+        for (QuestionSet qs : questionSets) {
+            long attempts = assessmentAttemptRepository.findByUser(null).stream()
+                    .filter(attempt -> attempt.getQuestionSet().getId().equals(qs.getId()))
+                    .count();
+            assessmentSummary.put(qs.getName(), attempts);
+        }
+
+        model.addAttribute("totalCompletedAssessments", totalCompletedAssessments);
+        model.addAttribute("totalMoodEntries", totalMoodEntries);
+        model.addAttribute("totalForumPosts", totalForumPosts);
+        model.addAttribute("totalForumThreads", totalForumThreads);
+        model.addAttribute("totalForumReplies", totalForumReplies);
+        model.addAttribute("totalAppointments", totalAppointments);
+        model.addAttribute("totalUsers", totalUsers);
+        model.addAttribute("assessmentSummary", assessmentSummary);
+
+        return "admin-dashboard"; 
     }
 
     @GetMapping("/users")

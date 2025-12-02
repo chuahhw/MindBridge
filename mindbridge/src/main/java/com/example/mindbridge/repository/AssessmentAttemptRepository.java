@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.example.mindbridge.model.AssessmentAttempt;
+import com.example.mindbridge.model.QuestionSet;
 import com.example.mindbridge.model.User;
 
 public interface AssessmentAttemptRepository extends JpaRepository<AssessmentAttempt, Integer> {
@@ -23,4 +24,6 @@ public interface AssessmentAttemptRepository extends JpaRepository<AssessmentAtt
 
     // Find recent assessment attempts across all users
     List<AssessmentAttempt> findAllByOrderByAttemptDateDesc();
+
+    long countByQuestionSet(QuestionSet questionSet);
 }
