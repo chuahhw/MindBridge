@@ -1,7 +1,5 @@
 package com.example.mindbridge.controller;
 
-import java.util.List;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,15 +15,9 @@ import java.util.HashMap;
 import com.example.mindbridge.model.Admin;
 import com.example.mindbridge.model.Counselor;
 import com.example.mindbridge.model.Student;
-import com.example.mindbridge.model.User;
 import com.example.mindbridge.repository.UserRepository;
 import com.example.mindbridge.service.AdminDashboardService;
 import com.example.mindbridge.service.UserService;
-import com.example.mindbridge.model.Appointment;
-import com.example.mindbridge.model.AssessmentAttempt;
-import com.example.mindbridge.model.ForumReply;
-import com.example.mindbridge.model.ForumThread;
-import com.example.mindbridge.model.MoodEntry;
 import com.example.mindbridge.model.QuestionSet;
 import com.example.mindbridge.model.User;
 import com.example.mindbridge.repository.AppointmentRepository;

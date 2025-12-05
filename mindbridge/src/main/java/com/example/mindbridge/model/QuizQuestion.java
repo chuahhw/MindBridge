@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "quiz_question") // Match your actual table name
+@Table(name = "quiz_question") 
 public class QuizQuestion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +34,7 @@ public class QuizQuestion {
 
     public QuizQuestion(String question, List<String> options, Integer correctAnswerIndex, LearningModule module) {
         this.questionText = question;
-        this.question = question; // Keep for backward compatibility if needed
+        this.question = question; 
         this.options = options;
         this.correctAnswerIndex = correctAnswerIndex;
         this.module = module;
@@ -56,7 +56,6 @@ public class QuizQuestion {
     public LearningModule getModule() { return module; }
     public void setModule(LearningModule module) { this.module = module; }
 
-    // Alias for getQuestion() for consistency with controller
     public String getQuestionText() {
         return this.questionText != null ? this.questionText : this.question;
     }
@@ -64,7 +63,6 @@ public class QuizQuestion {
         this.questionText = questionText;
     }
 
-    // Alias for getCorrectAnswerIndex() for consistency with controller
     public Integer getCorrectAnswer() {
         return this.correctAnswerIndex;
     }

@@ -13,7 +13,7 @@ public interface ForumThreadRepository extends JpaRepository<ForumThread, Long> 
     
     List<ForumThread> findAllByOrderByCreatedAtDesc();
 
-    // Find recent forum threads (alias for the existing method)
+    // Find recent forum threads 
     default List<ForumThread> findRecentForumThreads() {
         return findAllByOrderByCreatedAtDesc();
     }

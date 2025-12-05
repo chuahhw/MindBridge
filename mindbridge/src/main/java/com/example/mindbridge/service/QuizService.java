@@ -44,8 +44,6 @@ public class QuizService {
     private EntityManager entityManager; 
 
     private void validateStudent(Student student) {
-        // Since you're already using User entity in AssessmentService,
-        // you can use entityManager here too
         User user = entityManager.find(User.class, student.getId());
         if (user == null) {
             throw new RuntimeException("User not found");
@@ -55,10 +53,6 @@ public class QuizService {
         }
     }
 
-    /**
-     * Submit quiz with answers from a map (typically from a web form).
-     * This is the primary method to be called from the controller.
-     */
     @Transactional
     public QuizAttempt submitQuiz(Student student, Long moduleId, Map<String, String> submittedAnswers) {
         validateStudent(student);

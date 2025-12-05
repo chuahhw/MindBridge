@@ -38,10 +38,10 @@ public class AppointmentController {
         
         model.addAttribute("appointments", appointments);
         model.addAttribute("counselors", counselors);
-        model.addAttribute("studentName", student.getFullName()); // ADD THIS LINE
+        model.addAttribute("studentName", student.getFullName()); 
         model.addAttribute("activePage", "appointments");
         
-        return "student-appointments"; // or "appointments" - depending on your file name
+        return "student-appointments"; 
     }
 
     // Student: Book new appointment
@@ -51,7 +51,7 @@ public class AppointmentController {
             @RequestParam LocalDate date,
             @RequestParam LocalTime time,
             @RequestParam String type,
-            @RequestParam(required = false, defaultValue = "") String notes,  // ← ADD THIS
+            @RequestParam(required = false, defaultValue = "") String notes,  
             Authentication authentication,
             RedirectAttributes redirectAttributes) {
         
@@ -75,7 +75,7 @@ public class AppointmentController {
             redirectAttributes.addFlashAttribute("success", "Appointment booked successfully!");
             
         } catch (Exception e) {
-            e.printStackTrace();  // ← ADD THIS to see errors in console
+            e.printStackTrace();  
             redirectAttributes.addFlashAttribute("error", "Failed to book appointment: " + e.getMessage());
         }
         

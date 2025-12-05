@@ -25,9 +25,6 @@ import com.itextpdf.layout.properties.UnitValue;
 
 import com.example.mindbridge.model.Appointment;
 import com.example.mindbridge.model.AssessmentAttempt;
-import com.example.mindbridge.model.ForumReply;
-import com.example.mindbridge.model.ForumThread;
-import com.example.mindbridge.model.MoodEntry;
 import com.example.mindbridge.model.QuestionSet;
 import com.example.mindbridge.model.User;
 import com.example.mindbridge.repository.AppointmentRepository;
