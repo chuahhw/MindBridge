@@ -31,6 +31,7 @@ public class AdminContentController {
 
     @GetMapping("/content")
     public String adminContent(Model model) {
+
         List<LearningModule> modules = learningModuleService.getAllModulesIncludingInactive();
         if (modules == null) modules = new ArrayList<>();
 

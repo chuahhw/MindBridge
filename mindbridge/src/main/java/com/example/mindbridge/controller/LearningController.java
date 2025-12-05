@@ -3,7 +3,6 @@ package com.example.mindbridge.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Collections;
 
 import org.slf4j.Logger;
@@ -24,7 +23,6 @@ import com.example.mindbridge.model.QuizQuestion;
 import com.example.mindbridge.model.Student;
 import com.example.mindbridge.model.StudentProgress;
 import com.example.mindbridge.model.QuizAttempt;
-import com.example.mindbridge.repository.LearningModuleRepository;
 import com.example.mindbridge.service.LearningModuleService;
 import com.example.mindbridge.service.QuizService;
 import com.example.mindbridge.service.StudentService;
@@ -82,7 +80,7 @@ public class LearningController {
 
             logger.info("Step 6: Adding attributes to the model...");
             model.addAttribute("studentName", student.getFullName());
-            model.addAttribute("modules", modules); // 直接传递对象
+            model.addAttribute("modules", modules); 
             model.addAttribute("progressMap", progressMap);
             model.addAttribute("completedCount", completedCount);
             model.addAttribute("totalCount", totalCount);

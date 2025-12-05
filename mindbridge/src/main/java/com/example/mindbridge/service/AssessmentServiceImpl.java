@@ -4,7 +4,7 @@ import com.example.mindbridge.model.QuestionSet;
 import com.example.mindbridge.model.Student;
 import com.example.mindbridge.model.AssessmentAttempt;
 import com.example.mindbridge.model.Question;
-import com.example.mindbridge.model.User; // Add this import
+import com.example.mindbridge.model.User; 
 import com.example.mindbridge.repository.QuestionSetRepository;
 import com.example.mindbridge.repository.UserRepository;
 import com.example.mindbridge.repository.QuestionRepository;
@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,12 +25,6 @@ public class AssessmentServiceImpl implements AssessmentService {
 
     @Autowired
     private QuestionSetRepository questionSetRepository;
-
-    @Autowired
-    private QuestionRepository questionRepository;
-
-    @Autowired
-    private UserRepository userRepository; // Add this line
 
     @Autowired
     private AssessmentAttemptRepository assessmentAttemptRepository;
