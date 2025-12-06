@@ -3,237 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <title>Counselor Dashboard</title>
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            background: #f8f9fa; 
-            padding: 0;
-            margin: 0;
-        }
-
-        /* NAVBAR (Header) */
-        .navbar {
-            background:#128635;
-            padding:15px 0;
-            border-bottom:none;
-        }
-        .navbar-container {
-            max-width:1200px;
-            margin:auto;
-            padding:0 20px;
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-        }
-        .navbar-brand {
-            font-weight:600;
-            font-size:24px;
-            color:#fff;
-            text-decoration:none;
-        }
+        body { font-family: Arial, sans-serif; background: #f8f9fa; padding: 0; margin: 0; }
+        .navbar { background:#128635; padding:15px 0; border-bottom:none; }
+        .navbar-container { max-width:1200px; margin:auto; padding:0 20px; display:flex; justify-content:space-between; align-items:center; }
+        .navbar-brand { font-weight:600; font-size:24px; color:#fff; text-decoration:none; }
         .user-section { display:flex; align-items:center; gap:15px; }
         .username { color:#fff; font-size:14px; font-weight:500; }
-        .logout-btn {
-            background:#fff;
-            color:#128635;
-            padding:8px 16px;
-            border-radius:4px;
-            font-weight:600;
-            border:none;
-            cursor:pointer;
-        }
+        .logout-btn { background:#fff; color:#128635; padding:8px 16px; border-radius:4px; font-weight:600; border:none; cursor:pointer; }
         .logout-btn:hover { background:#f8f9fa; }
 
-        /* MENU TABS */
-        .menu-tabs {
-            background:#fff;
-            border-bottom:1px solid #dee2e6;
-            padding:15px 0;
-        }
-        .tabs-container {
-            max-width:1200px;
-            margin:auto;
-            padding:0 20px;
-        }
-        .nav-tabs {
-            display:flex;
-            list-style:none;
-            padding:0;
-            margin:0;
-        }
-        .nav-tabs .nav-link {
-            padding:15px 20px;
-            color:#495057;
-            font-weight:500;
-            font-size:14px;
-            text-decoration:none;
-            border:none;
-        }
-        .nav-tabs .nav-link.active {
-            color:#128635;
-            border-bottom:3px solid #128635;
-            font-weight:600;
-        }
-        .nav-tabs .nav-link:hover {
-            color:#128635;
-            background:#f8f9fa;
-        }
+        .menu-tabs { background:#fff; border-bottom:1px solid #dee2e6; padding:15px 0; }
+        .tabs-container { max-width:1200px; margin:auto; padding:0 20px; }
+        .nav-tabs { display:flex; list-style:none; padding:0; margin:0; }
+        .nav-tabs .nav-link { padding:15px 20px; color:#495057; font-weight:500; font-size:14px; text-decoration:none; border:none; }
+        .nav-tabs .nav-link.active { color:#128635; border-bottom:3px solid #128635; font-weight:600; }
+        .nav-tabs .nav-link:hover { color:#128635; background:#f8f9fa; }
 
-        /* Metric Cards */
-        .metric-card {
-            background: #fff;
-            border-radius: 10px;
-            padding: 20px;
-            text-align: left;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-        }
-
-        .metric-title {
-            font-size: 14px;
-            color: #666;
-            font-weight: 500;
-        }
-
-        .metric-number {
-            font-size: 28px;
-            font-weight: 700;
-            margin-top: 8px;
-        }
-
-        .metric-pill {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-weight: bold;
-            color: #333;
-        }
-
+        .metric-card { background: #fff; border-radius: 10px; padding: 20px; text-align: left; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+        .metric-title { font-size: 14px; color: #666; font-weight: 500; }
+        .metric-number { font-size: 28px; font-weight: 700; margin-top: 8px; }
+        .metric-pill { display: inline-block; padding: 4px 10px; border-radius: 6px; font-weight: bold; color: #333; }
         .pill-yellow { background: #fff3cd; }
         .pill-blue { background: #cfe2ff; }
         .pill-green { background: #d1e7dd; }
 
-        /* Today's Schedule */
-        .schedule-card {
-            background: #fff;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 25px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-        }
+        .schedule-card { background: #fff; border-radius: 10px; padding: 20px; margin-top: 25px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+        .schedule-item { background: #e8f0fe; padding: 15px 20px; border-left: 5px solid #4a90e2; border-radius: 8px; margin-bottom: 12px; }
+        .schedule-name { font-weight: 600; font-size: 16px; }
+        .schedule-type { font-size: 14px; color: #555; }
 
-        .schedule-item {
-            background: #e8f0fe;
-            padding: 15px 20px;
-            border-left: 5px solid #4a90e2;
-            border-radius: 8px;
-            margin-bottom: 12px;
-        }
-
-        .schedule-name {
-            font-weight: 600;
-            font-size: 16px;
-        }
-
-        .schedule-type {
-            font-size: 14px;
-            color: #555;
-        }
-
-        /* Pending Requests Box */
-        .pending-box {
-            background: #fff8d6;
-            border-left: 5px solid #e0b800;
-            padding: 20px;
-            margin-top: 25px;
-            border-radius: 8px;
-        }
+        .pending-box { background: #fff8d6; border-left: 5px solid #e0b800; padding: 20px; margin-top: 25px; border-radius: 8px; }
     </style>
 </head>
+
 <body>
 
-<!-- HEADER -->
 <div th:replace="~{fragments/counselor-header :: header}"></div>
-
-<!-- MENU -->
 <div th:replace="~{fragments/counselor-menu :: menu('dashboard')}"></div>
 
 <div class="container mt-4">
-
     <h3 class="mb-4">Dashboard</h3>
 
-    <!-- METRICS ROW -->
     <div class="row g-4">
-
-        <!-- Pending Requests -->
         <div class="col-md-4">
             <div class="metric-card">
                 <div class="metric-title">Pending Requests</div>
-                <div class="metric-number">
-                    <span class="metric-pill pill-yellow" th:text="${pendingCount}">3</span>
-                </div>
+                <div class="metric-number"><span class="metric-pill pill-yellow" th:text="${pendingCount}">0</span></div>
             </div>
         </div>
 
-        <!-- Today's Sessions -->
         <div class="col-md-4">
             <div class="metric-card">
                 <div class="metric-title">Today's Sessions</div>
-                <div class="metric-number">
-                    <span class="metric-pill pill-blue" th:text="${todaySessions}">2</span>
-                </div>
+                <div class="metric-number"><span class="metric-pill pill-blue" th:text="${todaySessions}">0</span></div>
             </div>
         </div>
 
-        <!-- This Week -->
         <div class="col-md-4">
             <div class="metric-card">
                 <div class="metric-title">This Week</div>
-                <div class="metric-number">
-                    <span class="metric-pill pill-green" th:text="${weekTotal}">8</span>
-                </div>
+                <div class="metric-number"><span class="metric-pill pill-green" th:text="${weekTotal}">0</span></div>
             </div>
         </div>
-
     </div>
 
     <!-- TODAY'S SCHEDULE -->
     <div class="schedule-card">
-
         <h5 class="mb-3">Today's Schedule</h5>
 
-        <div th:if="${todayList != null and todayList.size() > 0}">
+        <div th:if="${todayList != null and !todayList.isEmpty()}">
             <div th:each="ap : ${todayList}" class="schedule-item">
                 <div class="schedule-name">
-                    <span th:text="${ap.student.fullName}">Student</span>
-                    -
+                    <span th:text="${ap.student.fullName}">Student</span> -
                     <span th:text="${#temporals.format(ap.time, 'hh:mm a')}">00:00 PM</span>
                 </div>
                 <div class="schedule-type">
-                    <span th:text="${ap.type}">Video Call</span>
-                    •
-                    <span th:text="${ap.notes}">Initial Consultation</span>
+                    <span th:text="${ap.type}">Video Call</span> •
+                    <span th:text="${ap.notes}">Notes</span>
                 </div>
             </div>
         </div>
 
-        <p th:if="${todayList == null || todayList.size() == 0}" class="text-muted">
-            No sessions scheduled for today.
-        </p>
-
+        <p th:if="${todayList == null or todayList.isEmpty()}" class="text-muted">No sessions scheduled for today.</p>
     </div>
 
-    <!-- PENDING REQUESTS BOX -->
+    <!-- PENDING REQUESTS -->
     <div class="pending-box">
         <h6 class="fw-bold">Pending Requests</h6>
-        <p>You have <strong th:text="${pendingCount}">3</strong> appointment requests waiting for approval.</p>
-
+        <p>You have <strong th:text="${pendingCount}">0</strong> appointment requests waiting for approval.</p>
         <a th:href="@{/counselor/appointments}" class="btn btn-warning">View Requests</a>
+    </div>
+
+    <!-- PROFILE DETAILS + UPDATE FORM -->
+    <div class="card shadow p-3 mt-4">
+        <h5 class="mb-3">Your Profile</h5>
+
+        <!-- Current Specialty -->
+        <p>
+            <strong>Specialty:</strong>
+            <span th:if="${specialty != null and specialty != ''}" th:text="${specialty}"></span>
+            <span th:if="${specialty == null or specialty == ''}" class="text-muted">No specialty set</span>
+        </p>
+
+        <!-- Current Availability -->
+        <p>
+            <strong>Availability:</strong>
+            <span th:if="${availabilityList != null and !availabilityList.isEmpty()}"
+                  th:text="${#strings.arrayJoin(availabilityList.toArray(), ', ')}"></span>
+            <span th:if="${availabilityList == null or availabilityList.isEmpty()}" class="text-muted">No availability set</span>
+        </p>
+
+        <hr>
+
+        <h5 class="mb-3">Update Profile</h5>
+
+        <form th:action="@{/counselor/update-profile}" method="post">
+            <div class="mb-3">
+                <label>Specialty</label>
+                <input type="text" class="form-control" name="specialty" th:value="${specialty}">
+            </div>
+
+            <div class="mb-3">
+                <label class="fw-bold">Availability</label>
+                <div class="row">
+                    <div class="col-6">
+                        <label><input type="checkbox" name="availability" value="MONDAY"
+                            th:checked="${availabilityList?.contains('MONDAY')}"> Monday</label><br>
+                        <label><input type="checkbox" name="availability" value="TUESDAY"
+                            th:checked="${availabilityList?.contains('TUESDAY')}"> Tuesday</label><br>
+                        <label><input type="checkbox" name="availability" value="WEDNESDAY"
+                            th:checked="${availabilityList?.contains('WEDNESDAY')}"> Wednesday</label><br>
+                        <label><input type="checkbox" name="availability" value="THURSDAY"
+                            th:checked="${availabilityList?.contains('THURSDAY')}"> Thursday</label><br>
+                    </div>
+                    <div class="col-6">
+                        <label><input type="checkbox" name="availability" value="FRIDAY"
+                            th:checked="${availabilityList?.contains('FRIDAY')}"> Friday</label><br>
+                        <label><input type="checkbox" name="availability" value="SATURDAY"
+                            th:checked="${availabilityList?.contains('SATURDAY')}"> Saturday</label><br>
+                        <label><input type="checkbox" name="availability" value="SUNDAY"
+                            th:checked="${availabilityList?.contains('SUNDAY')}"> Sunday</label><br>
+                        <label><input type="checkbox" name="availability" value="EVERYDAY"
+                            th:checked="${availabilityList?.contains('EVERYDAY')}"> Everyday</label><br>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary">Save Changes</button>
+
+            <div th:if="${param.updated}">
+                <p class="text-success mt-2">Profile updated successfully!</p>
+            </div>
+        </form>
     </div>
 
 </div>
 
 </body>
 </html>
+
