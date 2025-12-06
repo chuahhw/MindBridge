@@ -567,7 +567,8 @@
                     </div>
                     
                     <!-- Show Join Button only for approved appointments -->
-                    <button th:if="${appointment.status == 'APPROVED'}" class="join-button">
+                    <button th:if="${appointment.status == 'APPROVED' and appointment.type == 'VIDEO_CALL'}" 
+                            class="join-button">
                         <i class="fas fa-video"></i> Join Video Call
                     </button>
                 </div>
