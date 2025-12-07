@@ -9,6 +9,8 @@ import com.example.mindbridge.model.ForumReply;
 
 @Repository
 public interface ForumReplyRepository extends JpaRepository<ForumReply, Long> {
-    
+
     List<ForumReply> findByThreadIdOrderByCreatedAtAsc(Long threadId);
+
+    Long countByThreadId(Long threadId);
 }

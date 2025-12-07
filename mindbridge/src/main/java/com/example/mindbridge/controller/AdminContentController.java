@@ -60,15 +60,30 @@ public class AdminContentController {
 
         List<LearningModule> modules = learningModuleService.getAllModulesIncludingInactive();
         if (modules == null) modules = new ArrayList<>();
+        System.out.println("DEBUG: Found " + modules.size() + " learning modules");
 
         List<ForumThread> threads = forumService.getAllThreads();
-        if (threads == null) threads = new ArrayList<>();
+        if (threads == null) {
+            threads = new ArrayList<>();
+            System.out.println("DEBUG: threads was null, initialized empty list");
+        } else {
+            System.out.println("DEBUG: Found " + threads.size() + " forum threads");
+            // Log some details about the threads
+            threads.forEach(thread -> {
+                System.out.println("DEBUG: Thread ID: " + thread.getId() + ", Title: " + thread.getTitle());
+            });
+        }
 
         // Prepare thread data with reply counts for template
         List<ThreadInfo> threadInfos = threads.stream().map(thread -> {
             ThreadInfo info = new ThreadInfo();
             info.setThread(thread);
-            info.setReplyCount(thread.getReplies() != null ? thread.getReplies().size() : 0);
+
+            // Get reply count directly from repository
+            Long replyCount = replyRepository.countByThreadId(thread.getId());
+            info.setReplyCount(replyCount != null ? replyCount.intValue() : 0);
+            System.out.println("DEBUG: Thread " + thread.getId() + " has " + replyCount + " replies");
+
             info.setFormattedDate(thread.getCreatedAt() != null ?
                 java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").format(thread.getCreatedAt())
                 : "N/A");
@@ -192,39 +207,31 @@ public class AdminContentController {
     @GetMapping("/content/forum/{threadId}/view")
     public String viewForumThreadModal(@PathVariable Long threadId, Model model) {
         try {
-            // First load all threads to get the specific one with replies loaded
-            List<ForumThread> allThreads = forumService.getAllThreads();
-            ForumThread viewThread = allThreads.stream()
-                .filter(t -> t.getId().equals(threadId))
-                .findFirst()
-                .orElse(null);
+            // Always get thread with replies loaded
+            ForumThread viewThread = forumService.getThreadById(threadId);
 
             if (viewThread == null) {
                 System.out.println("DEBUG: Thread not found with ID: " + threadId);
                 return "redirect:/admin/content";
             }
 
-            // Force load replies if not loaded
-            if (viewThread.getReplies() == null || viewThread.getReplies().isEmpty()) {
-                // Try to get fresh data from service
-                viewThread = forumService.getThreadById(threadId);
-            }
-
             System.out.println("DEBUG: Found thread for modal: " + viewThread.getTitle());
             System.out.println("DEBUG: Thread has replies: " + (viewThread.getReplies() != null ? viewThread.getReplies().size() : "null"));
-            if (viewThread.getReplies() != null) {
-                System.out.println("DEBUG: First reply content: " + (viewThread.getReplies().isEmpty() ? "no replies" : viewThread.getReplies().get(0).getContent()));
+            if (viewThread.getReplies() != null && !viewThread.getReplies().isEmpty()) {
+                System.out.println("DEBUG: First reply content: " + viewThread.getReplies().get(0).getContent());
             }
 
             // Add all existing model attributes
             List<LearningModule> modules = learningModuleService.getAllModulesIncludingInactive();
             model.addAttribute("modules", modules);
 
-            // Prepare thread data for template
+            // Prepare thread data for template (reload all threads without replies for efficiency)
+            List<ForumThread> allThreads = forumService.getAllThreads();
             List<ThreadInfo> threadInfos = allThreads.stream().map(thread -> {
                 ThreadInfo info = new ThreadInfo();
                 info.setThread(thread);
-                info.setReplyCount(thread.getReplies() != null ? thread.getReplies().size() : 0);
+                Long replyCount = replyRepository.countByThreadId(thread.getId());
+                info.setReplyCount(replyCount != null ? replyCount.intValue() : 0);
                 info.setFormattedDate(thread.getCreatedAt() != null ?
                     java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").format(thread.getCreatedAt())
                     : "N/A");
