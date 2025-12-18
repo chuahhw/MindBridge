@@ -14,10 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.mindbridge.model.AssessmentResult;
+import com.example.mindbridge.model.AssessmentAttempt;
 import com.example.mindbridge.model.QuestionSet;
 import com.example.mindbridge.model.Student;
-import com.example.mindbridge.model.AssessmentAttempt;
 import com.example.mindbridge.service.AssessmentService;
 import com.example.mindbridge.service.StudentService;
 
@@ -66,51 +65,59 @@ public class AssessmentController {
         return "redirect:/student/assessments/result/" + attempt.getId();
     }
 
+    // FIX: Change this to just "/result/{attemptId}" since the controller already has "/student/assessments"
     @GetMapping("/result/{attemptId}")
-public String showAssessmentResult(@PathVariable Integer attemptId, Model model, Authentication authentication) {
-    System.out.println("=== DEBUG: showAssessmentResult called ===");
-    System.out.println("Attempt ID: " + attemptId);
-    
-    Student student = studentService.getLoggedInStudent(authentication);
-    System.out.println("Student: " + student.getFullName() + " (ID: " + student.getId() + ")");
-    
-    model.addAttribute("studentName", student.getFullName());
-
+public String viewResult(@PathVariable Integer attemptId, Model model, Authentication authentication) {
     try {
+        System.out.println("=== DEBUG: viewResult called ===");
+        System.out.println("Attempt ID: " + attemptId);
+        
+        // Get the current student to verify ownership
+        Student student = studentService.getLoggedInStudent(authentication);
+        System.out.println("Student: " + student.getFullName() + " (ID: " + student.getId() + ")");
+        
+        // Add student name to model - THIS IS THE FIX!
+        model.addAttribute("studentName", student.getFullName());
+        
+        // Get the assessment attempt
         AssessmentAttempt attempt = assessmentService.getAssessmentAttemptById(attemptId);
         System.out.println("Found attempt: ID=" + attempt.getId());
         System.out.println("Attempt User ID: " + attempt.getUser().getId());
-        System.out.println("Question Set: " + attempt.getQuestionSet().getName());
+        
+        // Verify that this attempt belongs to the current student
+        if (!attempt.getUser().getId().equals(student.getId())) {
+            System.err.println("ERROR: Unauthorized access attempt!");
+            throw new RuntimeException("Unauthorized access to assessment result");
+        }
+        
+        // Calculate max score and percentage
+        String setName = attempt.getQuestionSet().getName();
+        int maxScore = assessmentService.getMaxScoreForSet(setName);
+        double percentage = (attempt.getTotalScore() * 100.0) / maxScore;
+        
+        System.out.println("Question Set: " + setName);
         System.out.println("Total Score: " + attempt.getTotalScore());
         System.out.println("Severity Level: " + attempt.getSeverityLevel());
-
-        if (!attempt.getUser().getId().equals(student.getId())) {
-            System.out.println("ERROR: Unauthorized access!");
-            return "redirect:/student/assessments";
-        }
-
-        int maxScore = assessmentService.getMaxScoreForSet(attempt.getQuestionSet().getName());
         System.out.println("Max Score: " + maxScore);
+        System.out.println("Percentage: " + percentage);
         
-        AssessmentResult result = new AssessmentResult(
-                attempt.getTotalScore(),
-                maxScore,
-                attempt.getSeverityLevel());
+        // Add attributes to model
+        model.addAttribute("attempt", attempt);
+        model.addAttribute("assessmentName", setName);
+        model.addAttribute("maxScore", maxScore);
+        model.addAttribute("percentage", Math.round(percentage));
         
-        System.out.println("Created AssessmentResult: " + 
-            "score=" + result.getScore() + 
-            ", maxScore=" + result.getMaxScore() + 
-            ", severity=" + result.getSeverity());
+        // For backward compatibility, also add 'result'
+        model.addAttribute("result", attempt);
         
-        model.addAttribute("result", result);
-        model.addAttribute("assessmentName", attempt.getQuestionSet().getName());
-        
+        // Return the correct template - make sure this template exists
         return "assessment-result";
         
     } catch (Exception e) {
-        System.err.println("ERROR in showAssessmentResult: " + e.getMessage());
+        System.err.println("ERROR in viewResult: " + e.getMessage());
         e.printStackTrace();
-        model.addAttribute("error", "Could not load assessment results: " + e.getMessage());
-        return "redirect:/student/assessments";
+        model.addAttribute("error", "Failed to load assessment result: " + e.getMessage());
+        return "error";
     }
-}}
+}
+}
