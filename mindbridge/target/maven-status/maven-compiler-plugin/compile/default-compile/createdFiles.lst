@@ -10,6 +10,7 @@ com\example\mindbridge\service\ForumService.class
 com\example\mindbridge\model\QuizAttempt.class
 com\example\mindbridge\service\AssessmentServiceImpl.class
 com\example\mindbridge\controller\AppointmentController.class
+com\example\mindbridge\controller\AdminContentController$ThreadInfo.class
 com\example\mindbridge\model\AnswerOption.class
 com\example\mindbridge\repository\QuestionSetRepository.class
 com\example\mindbridge\model\AssessmentAnswer.class
@@ -45,7 +46,6 @@ com\example\mindbridge\repository\UserRepository.class
 com\example\mindbridge\service\MoodService.class
 com\example\mindbridge\repository\AnswerOptionRepository.class
 com\example\mindbridge\model\Question.class
-com\example\mindbridge\repository\AssessmentAnswerRepository.class
 com\example\mindbridge\config\AppConfig.class
 com\example\mindbridge\repository\CounselorRepository.class
 com\example\mindbridge\service\CustomUserDetailsService.class

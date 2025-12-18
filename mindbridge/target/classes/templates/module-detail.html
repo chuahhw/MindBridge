@@ -11,13 +11,14 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title th:text="${module.title} + ' - Learning Module'">Module Detail</title>
     <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            background: #f5f7fa; 
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f8f9fa;
             padding: 0;
             margin: 0;
+            color: #374151;
         }
-        
+
         /* Menu Tabs */
         .menu-tabs {
             background-color: #fff;
@@ -105,44 +106,113 @@
         .logout-btn:hover { background-color: #f8f9fa; }
 
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 30px auto;
             padding: 0 20px;
         }
-        
-        .module-header {
+
+        .breadcrumb {
+            background: none;
+            padding: 0;
+            margin-bottom: 1.5rem;
+        }
+        .breadcrumb-item a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+        .breadcrumb-item.active {
+            color: #6b7280;
+        }
+
+        .module-main-content {
             background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            margin-bottom: 30px;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            border: 1px solid #e5e7eb;
         }
-        
+
         .module-title {
-            font-size: 28px;
-            font-weight: 600;
+            font-size: 2.25rem;
+            font-weight: 800;
             color: #1f2937;
-            margin-bottom: 15px;
+            margin-bottom: 1rem;
+            line-height: 1.2;
         }
-        
+
         .module-category {
             display: inline-block;
-            background: #f3f4f6;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 14px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
             color: #6b7280;
-            margin-bottom: 15px;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
         }
-        
-        .module-content {
+
+        .module-description {
+            font-size: 1.1rem;
+            color: #4b5563;
+            margin-bottom: 2rem;
+        }
+
+        .module-body {
+            line-height: 1.7;
+            color: #374151;
+        }
+        .module-body h1, .module-body h2, .module-body h3 {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+        .module-body p {
+            margin-bottom: 1rem;
+        }
+        .module-body ul, .module-body ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .module-body code {
+            background: #f3f4f6;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+            font-size: 85%;
+        }
+        .module-body blockquote {
+            border-left: 4px solid #d1d5db;
+            padding-left: 1rem;
+            margin-left: 0;
+            color: #6b7280;
+            font-style: italic;
+        }
+
+        .sidebar-card {
             background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            line-height: 1.6;
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06);
+            margin-bottom: 1.5rem;
+            border: 1px solid #e5e7eb;
         }
-        
+        .sidebar-card h5 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 0.75rem;
+        }
+        .sidebar-card ul {
+            list-style-type: none;
+            padding-left: 0;
+            font-size: 0.9rem;
+        }
+        .sidebar-card ul li {
+            margin-bottom: 0.5rem;
+            color: #4b5563;
+        }
+
         .btn-back {
             display: inline-block;
             background: #f3f4f6;
@@ -151,12 +221,12 @@
             border-radius: 8px;
             text-decoration: none;
             margin-top: 20px;
+            font-weight: 600;
         }
-        
         .btn-back:hover {
             background: #e5e7eb;
         }
-        
+
         .alert {
             padding: 15px;
             border-radius: 8px;
@@ -180,7 +250,7 @@
             color: #1e40af;
             border: 1px solid #bfdbfe;
         }
-        
+
         /* BUTTON STYLES */
         .btn-primary {
             background: #2563eb;
@@ -193,11 +263,11 @@
             cursor: pointer;
             transition: background 0.2s;
         }
-        
         .btn-primary:hover {
             background: #1d4ed8;
         }
-        
+
+        /* FIX: Make this a class, not a tag */
         .btn-success {
             background: #10b981;
             border: none;
@@ -209,9 +279,30 @@
             cursor: pointer;
             transition: background 0.2s;
         }
-        
         .btn-success:hover {
             background: #059669;
+        }
+
+        .quiz-form-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            border: 1px solid #e5e7eb;
+        }
+        .quiz-question {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        .quiz-question:last-of-type {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .quiz-history-card {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
         }
     </style>
 </head>
@@ -223,6 +314,15 @@
     <div th:replace="~{fragments/menu :: menu('learning')}"></div>
 
     <div class="container">
+        <!-- Breadcrumbs -->
+        <nav aria-label="breadcrumb" class="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/student/dashboard}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/student/learning}">Learning Modules</a></li>
+                <li class="breadcrumb-item active" aria-current="page" th:text="${module.title}">Module</li>
+            </ol>
+        </nav>
+
         <!-- Error/Success Messages -->
         <div th:if="${error}" class="alert alert-danger">
             <i class="fas fa-exclamation-circle"></i> <span th:text="${error}"></span>
@@ -235,178 +335,141 @@
             <i class="fas fa-info-circle"></i> <span th:text="${info}"></span>
         </div>
 
-        <!-- Module Header -->
-        <div class="module-header">
-            <div class="module-category" th:text="${module.category}">Category</div>
-            <h1 class="module-title" th:text="${module.title}">Module Title</h1>
-            
-            <div style="margin-bottom: 15px;">
-                <span th:if="${module.duration}">
-                    <i class="fas fa-clock"></i> Duration: <span th:text="${module.duration}"></span>
-                </span>
-                <span th:if="${isCompleted}" style="color: #10b981; margin-left: 15px;">
-                    <i class="fas fa-check-circle"></i> Completed
-                </span>
-            </div>
-            
-            <p style="color: #6b7280; font-size: 16px;" th:text="${module.description}">
-                Module description
-            </p>
-        </div>
+        <div class="row g-4">
+            <!-- Main Content Column -->
+            <div class="col-lg-8">
+                <div class="module-main-content">
+                    <div class="module-category" th:text="${module.category}">Category</div>
+                    <h1 class="module-title" th:text="${module.title}">Module Title</h1>
+                    <p class="module-description" th:text="${module.description}">Module description</p>
 
-        <!-- Module Content -->
-        <div class="module-content">
-            <h3>Learning Content</h3>
-            
-            <!-- Learning Objectives -->
-            <div th:if="${not #lists.isEmpty(learningObjectivesList)}" 
-                 style="background: #f0f9ff; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #2563eb;">
-                <h4 style="color: #1e40af; margin-top: 0;">
-                    <i class="fas fa-bullseye"></i> Learning Objectives
-                </h4>
-                <ul style="margin-bottom: 0;">
-                    <li th:each="objective : ${learningObjectivesList}" 
-                        th:text="${objective}" 
-                        style="margin-bottom: 5px;">
-                        Objective
-                    </li>
-                </ul>
-            </div>
-            
-            <!-- Main Content -->
-            <div th:if="${module.content != null and not #strings.isEmpty(module.content)}">
-                <div th:utext="${module.content}">
-                    <!-- Module content will be rendered here -->
-                </div>
-            </div>
-            <div th:unless="${module.content != null and not #strings.isEmpty(module.content)}">
-                <div style="padding: 20px; background: #f3f4f6; border-radius: 8px; color: #6b7280;">
-                    <h4>Module Information:</h4>
-                    <p><strong>Description:</strong> <span th:text="${module.description}"></span></p>
-                    
-                    <div th:if="${module.duration}">
-                        <p><strong>Duration:</strong> <span th:text="${module.duration}"></span></p>
-                    </div>
-                    
-                    <div th:if="${module.category}">
-                        <p><strong>Category:</strong> <span th:text="${module.category}"></span></p>
-                    </div>
-                    
-                    <div style="margin-top: 15px; padding: 15px; background: #e5e7eb; border-radius: 6px;">
-                        <p style="margin: 0; font-style: italic;">
-                            <i class="fas fa-info-circle"></i> 
-                            Detailed content will be available soon. Please review the learning objectives above.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Quiz Section -->
-        <div id="quiz-container" style="margin-top: 30px;" 
-             th:if="${not #lists.isEmpty(questions) and not isCompleted and not hasPassed}">
-            <!-- This button will be shown initially -->
-            <button id="start-quiz-btn" type="button" class="btn btn-primary w-100" 
-                    style="background: #2563eb; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px;">
-                <i class="fas fa-graduation-cap"></i> Take Quiz to Complete
-            </button>
-
-            <!-- The actual quiz form, hidden by default -->
-            <form id="quiz-form" th:action="@{'/student/learning/module/' + ${module.id} + '/quiz'}" 
-                  method="post" class="d-none">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-                    <h3><i class="fas fa-question-circle"></i> Knowledge Check</h3>
-                    <p style="color: #6b7280; margin-bottom: 20px;">Test your understanding of this module. A score of 80% or higher is required to pass. You can only pass once.</p>
-                    
-                    <!-- Loop through questions -->
-                    <div th:each="question, iter : ${questions}" style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #e5e7eb;">
-                        <h5 th:text="'Question ' + ${iter.count} + ': ' + ${question.questionText}">Question</h5>
-                        <div style="margin-left: 20px;">
-                            <!-- Loop through options for each question -->
-                            <div th:each="option, optIter : ${question.options}" style="margin: 5px 0;">
-                                <input type="radio" 
-                                       th:name="'question-' + ${question.id}"
-                                       th:id="'option-' + ${question.id} + '-' + ${optIter.index}"
-                                       th:value="${optIter.index}"
-                                       required>
-                                <label th:for="'option-' + ${question.id} + '-' + ${optIter.index}"
-                                       th:text="${option}" 
-                                       style="margin-left: 8px;">
-                                    Option
-                                </label>
+                    <div class="module-body">
+                        <!-- Main Content -->
+                        <div th:if="${module.content != null and not #strings.isEmpty(module.content)}" th:utext="${module.content}"></div>
+                        
+                        <!-- Fallback if content is empty -->
+                        <div th:unless="${module.content != null and not #strings.isEmpty(module.content)}">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i> Detailed content for this module will be available soon. Please review the learning objectives.
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Submit Button -->
-                    <button type="submit" id="submit-quiz-btn" class="btn btn-primary" 
-                            style="background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 8px;">
-                        <i class="fas fa-paper-plane"></i> Submit Answers
-                    </button>
                 </div>
-            </form>
-        </div>
+            </div>
 
-        <!-- If already passed but not marked complete (edge case) -->
-        <div th:if="${hasPassed and not isCompleted}" style="margin-top: 30px;">
-            <div style="background: #fef3c7; padding: 20px; border-radius: 8px; color: #92400e; border: 1px solid #fbbf24;">
-                <h4><i class="fas fa-exclamation-triangle"></i> Quiz Passed</h4>
-                <p>You have passed the quiz for this module. Click below to mark the module as complete.</p>
-                <form th:action="@{'/student/learning/module/' + ${module.id} + '/complete'}" method="post">
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                    <button type="submit" class="btn btn-success" 
-                            style="background: #10b981; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px;">
-                        <i class="fas fa-check"></i> Mark Module as Complete
-                    </button>
-                </form>
+            <!-- Sidebar Column -->
+            <div class="col-lg-4">
+                <!-- Status Card -->
+                <div class="sidebar-card">
+                    <h5><i class="fas fa-info-circle me-2 text-primary"></i>Module Status</h5>
+                    <ul class="list-unstyled mb-0">
+                        <li>
+                            <strong>Status:</strong>
+                            <span th:if="${isCompleted}" class="badge bg-success">Completed</span>
+                            <span th:unless="${isCompleted}" class="badge bg-primary">In Progress</span>
+                        </li>
+                        <li th:if="${module.duration}"><strong>Duration:</strong> <span th:text="${module.duration}"></span></li>
+                    </ul>
+                </div>
+
+                <!-- Learning Objectives Card -->
+                <div class="sidebar-card" th:if="${not #lists.isEmpty(learningObjectivesList)}">
+                    <h5><i class="fas fa-bullseye me-2 text-primary"></i>Learning Objectives</h5>
+                    <ul class="list-unstyled mb-0">
+                        <li th:each="objective : ${learningObjectivesList}">
+                            <i class="fas fa-check text-success me-2"></i>
+                            <span th:text="${objective}">Objective</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Action Card: Quiz or Mark Complete -->
+                <div class="sidebar-card">
+                    <h5><i class="fas fa-tasks me-2 text-primary"></i>Next Step</h5>
+
+                    <!-- Quiz Section -->
+                    <div id="quiz-container" th:if="${not #lists.isEmpty(questions) and not isCompleted and not hasPassed}">
+                        <p class="small text-muted">Test your knowledge to complete the module. A score of 80% is required.</p>
+                        <button id="start-quiz-btn" type="button" class="btn btn-primary w-100">
+                            <i class="fas fa-graduation-cap"></i> Take Quiz
+                        </button>
+                    </div>
+
+                    <!-- If already passed but not marked complete -->
+                    <div th:if="${hasPassed and not isCompleted}">
+                        <p class="small text-muted">You've passed the quiz. Mark the module as complete to finish.</p>
+                        <form th:action="@{'/student/learning/module/' + ${module.id} + '/complete'}" method="post">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="fas fa-check"></i> Mark as Complete
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- "Mark as Complete" button for modules WITHOUT a quiz -->
+                    <div th:if="${#lists.isEmpty(questions) and not isCompleted}">
+                        <p class="small text-muted">You've reviewed the material. Mark this module as complete.</p>
+                        <form th:action="@{'/student/learning/module/' + ${module.id} + '/complete'}" method="post">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="fas fa-check"></i> Mark as Complete
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Completion Message -->
+                    <div th:if="${isCompleted}" class="alert alert-success text-center mb-0">
+                        <h5 class="mb-1"><i class="fas fa-check-circle"></i> Module Completed!</h5>
+                        <p class="small mb-0">Great job!</p>
+                    </div>
+                </div>
+
+                <!-- Quiz Attempt History -->
+                <div class="sidebar-card quiz-history-card" th:if="${not #lists.isEmpty(quizAttempts)}">
+                    <h5><i class="fas fa-history me-2 text-primary"></i>Quiz History</h5>
+                    <table class="table table-sm small">
+                        <thead>
+                            <tr><th>Date</th><th>Score</th><th>Result</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="attempt : ${quizAttempts}">
+                                <td th:text="${#temporals.format(attempt.attemptTime, 'dd-MMM-yy HH:mm')}"></td>
+                                <td th:text="${attempt.score} + '%'"></td>
+                                <td><span th:text="${attempt.passed ? 'Passed' : 'Failed'}" th:class="${attempt.passed ? 'text-success' : 'text-danger'}"></span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
-        <!-- "Mark as Complete" button for modules WITHOUT a quiz -->
-        <div style="margin-top: 30px;" th:if="${#lists.isEmpty(questions) and not isCompleted}">
-            <form th:action="@{'/student/learning/module/' + ${module.id} + '/complete'}" method="post">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                <button type="submit" class="btn btn-success"
-                        style="background: #10b981; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px;">
-                    <i class="fas fa-check"></i> Mark as Complete
+        <!-- Quiz Form (hidden by default, shown in main column when active) -->
+        <form id="quiz-form" th:action="@{'/student/learning/module/' + ${module.id} + '/quiz'}" 
+              method="post" class="d-none mt-4">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <div class="quiz-form-card">
+                <h3><i class="fas fa-question-circle text-primary"></i> Knowledge Check</h3>
+                <p class="text-muted mb-4">A score of 80% or higher is required to pass.</p>
+                
+                <div th:each="question, iter : ${questions}" class="quiz-question">
+                    <h5 th:text="'Question ' + ${iter.count} + ': ' + ${question.questionText}">Question</h5>
+                    <div class="ms-2">
+                        <div th:each="option, optIter : ${question.options}" class="form-check">
+                            <input class="form-check-input" type="radio" 
+                                   th:name="'question-' + ${question.id}"
+                                   th:id="'option-' + ${question.id} + '-' + ${optIter.index}"
+                                   th:value="${optIter.index}"
+                                   required>
+                            <label class="form-check-label" th:for="'option-' + ${question.id} + '-' + ${optIter.index}" th:text="${option}">Option</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" id="submit-quiz-btn" class="btn btn-primary mt-3">
+                    <i class="fas fa-paper-plane"></i> Submit Answers
                 </button>
-            </form>
-        </div>
-
-        <!-- Completion Message -->
-        <div th:if="${isCompleted}" style="margin-top: 30px; background: #d1fae5; padding: 20px; border-radius: 8px; color: #065f46; text-align: center; border: 1px solid #a7f3d0;">
-            <h4><i class="fas fa-check-circle"></i> Congratulations!</h4>
-            <p style="margin-bottom: 0;">You have successfully completed this module.</p>
-        </div>
-
-        <!-- Quiz Attempt History -->
-        <div th:if="${not #lists.isEmpty(quizAttempts)}" style="margin-top: 30px;">
-            <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-                <h3><i class="fas fa-history"></i> Quiz History</h3>
-                <table class="table table-striped" style="margin-top: 15px;">
-                    <thead>
-                        <tr>
-                            <th>Attempt Date</th>
-                            <th>Score</th>
-                            <th>Result</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="attempt : ${quizAttempts}">
-                            <td th:text="${#temporals.format(attempt.attemptTime, 'yyyy-MM-dd HH:mm')}"></td>
-                            <td th:text="${attempt.score} + '%'"></td>
-                            <td><span th:text="${attempt.passed ? 'Passed' : 'Failed'}" th:class="${attempt.passed ? 'text-success' : 'text-danger'}"></span></td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
-        </div>
-
-        <!-- Back Button -->
-        <a th:href="@{/student/learning}" class="btn-back" style="margin-top: 30px;">
-            <i class="fas fa-arrow-left"></i> Back to Modules
-        </a>
+        </form>
     </div>
 
     <!-- Bootstrap JS -->
@@ -421,12 +484,13 @@
             
             if (startQuizBtn && quizForm) {
                 startQuizBtn.addEventListener('click', function() {
-                    if (confirm('Starting the quiz will begin your attempt. Are you ready?')) {
+                    if (confirm('You are about to start the quiz. This will count as an attempt. Are you ready?')) {
                         quizForm.classList.remove('d-none');
-                        startQuizBtn.classList.add('d-none');
+                        // Hide the entire sidebar card containing the button
+                        startQuizBtn.closest('.sidebar-card').classList.add('d-none');
                         
                         // Optional: Scroll to quiz for better UX
-                        quizForm.scrollIntoView({ behavior: 'smooth' });
+                        quizForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
                 });
             }
