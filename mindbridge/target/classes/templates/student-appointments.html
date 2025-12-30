@@ -554,8 +554,6 @@
                         <span th:text="${#temporals.format(appointment.time, 'hh:mm a')}">02:00 PM</span>
                     </div>
                     
-                    <div class="appointment-details" th:text="${appointment.type.replace('_', ' ')}">Video Call</div>
-                    
                     <div th:if="${appointment.notes}" class="appointment-note">
                         <strong>Your note:</strong> <span th:text="${appointment.notes}">Initial consultation</span>
                     </div>
@@ -566,11 +564,6 @@
                         <p th:text="${appointment.declineReason}">Counselor is not available at the selected time</p>
                     </div>
                     
-                    <!-- Show Join Button only for approved appointments -->
-                    <button th:if="${appointment.status == 'APPROVED' and appointment.type == 'VIDEO_CALL'}" 
-                            class="join-button">
-                        <i class="fas fa-video"></i> Join Video Call
-                    </button>
                 </div>
             </div>
         </div>
@@ -634,15 +627,7 @@
                     <div class="form-group">
                         <label class="form-label">Session Type <span class="required">*</span></label>
                         
-                        <div class="session-types">
-                            <div class="session-option">
-                                <input type="radio" name="type" value="VIDEO_CALL" id="video" required>
-                                <label for="video" class="session-info">
-                                    <h5>Video Call</h5>
-                                    <p class="description">Online session</p>
-                                </label>
-                            </div>
-                            
+                        <div class="session-types">                   
                             <div class="session-option">
                                 <input type="radio" name="type" value="IN_PERSON" id="inperson">
                                 <label for="inperson" class="session-info">
