@@ -27,9 +27,15 @@
                         <a th:class="${activePage == 'reports' ? 'nav-link active' : 'nav-link'}" 
                            th:href="@{/admin/reports}">Reports</a>
                     </li>
+                    <!-- Profile Tab -->
+                    <li>
+                        <a th:class="${activePage == 'profile' ? 'nav-link active' : 'nav-link'}"
+                           th:href="@{/admin/profile}">Profile</a>
+                    </li>
                 </ul>
             </div>
         </div>
     </div>
 </body>
 </html>
+
