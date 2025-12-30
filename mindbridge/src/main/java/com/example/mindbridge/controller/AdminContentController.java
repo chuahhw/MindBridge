@@ -216,7 +216,25 @@ public class AdminContentController {
             }
 
             System.out.println("DEBUG: Found thread for modal: " + viewThread.getTitle());
-            System.out.println("DEBUG: Thread has replies: " + (viewThread.getReplies() != null ? viewThread.getReplies().size() : "null"));
+
+            // Explicitly load replies from repository and attach to the viewThread to avoid
+            // potential lazy-loading or detached collection issues in the template.
+            java.util.List<com.example.mindbridge.model.ForumReply> replies = replyRepository.findByThreadIdOrderByCreatedAtAsc(threadId);
+            if (replies == null) replies = new java.util.ArrayList<>();
+
+            // Touch createdBy to ensure it's initialized while we're in transactional context
+            replies.forEach(r -> {
+                if (r.getCreatedBy() != null) {
+                    try {
+                        r.getCreatedBy().getFullName();
+                    } catch (Exception e) {
+                        // ignore initialization issues; at least replies list is set
+                    }
+                }
+            });
+
+            viewThread.setReplies(replies);
+            System.out.println("DEBUG: Thread has replies (loaded): " + (viewThread.getReplies() != null ? viewThread.getReplies().size() : "null"));
             if (viewThread.getReplies() != null && !viewThread.getReplies().isEmpty()) {
                 System.out.println("DEBUG: First reply content: " + viewThread.getReplies().get(0).getContent());
             }

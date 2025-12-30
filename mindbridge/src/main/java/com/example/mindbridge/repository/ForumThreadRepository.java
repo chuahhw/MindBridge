@@ -18,6 +18,7 @@ public interface ForumThreadRepository extends JpaRepository<ForumThread, Long> 
         return findAllByOrderByCreatedAtDesc();
     }
 
-    @Query("SELECT t FROM ForumThread t LEFT JOIN FETCH t.replies WHERE t.id = :id")
+    // Also fetch the reply authors to avoid lazy-loading issues in views
+    @Query("SELECT DISTINCT t FROM ForumThread t LEFT JOIN FETCH t.replies r LEFT JOIN FETCH r.createdBy WHERE t.id = :id")
     ForumThread findByIdWithReplies(Long id);
 }
