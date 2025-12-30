@@ -96,69 +96,6 @@
         <a th:href="@{/counselor/appointments}" class="btn btn-warning">View Requests</a>
     </div>
 
-    <!-- PROFILE DETAILS + UPDATE FORM -->
-    <div class="card shadow p-3 mt-4">
-        <h5 class="mb-3">Your Profile</h5>
-
-        <!-- Current Specialty -->
-        <p>
-            <strong>Specialty:</strong>
-            <span th:if="${specialty != null and specialty != ''}" th:text="${specialty}"></span>
-            <span th:if="${specialty == null or specialty == ''}" class="text-muted">No specialty set</span>
-        </p>
-
-        <!-- Current Availability -->
-        <p>
-            <strong>Availability:</strong>
-            <span th:if="${availabilityList != null and !availabilityList.isEmpty()}"
-                  th:text="${#strings.arrayJoin(availabilityList.toArray(), ', ')}"></span>
-            <span th:if="${availabilityList == null or availabilityList.isEmpty()}" class="text-muted">No availability set</span>
-        </p>
-
-        <hr>
-
-        <h5 class="mb-3">Update Profile</h5>
-
-        <form th:action="@{/counselor/update-profile}" method="post">
-            <div class="mb-3">
-                <label>Specialty</label>
-                <input type="text" class="form-control" name="specialty" th:value="${specialty}">
-            </div>
-
-            <div class="mb-3">
-                <label class="fw-bold">Availability</label>
-                <div class="row">
-                    <div class="col-6">
-                        <label><input type="checkbox" name="availability" value="MONDAY"
-                            th:checked="${availabilityList?.contains('MONDAY')}"> Monday</label><br>
-                        <label><input type="checkbox" name="availability" value="TUESDAY"
-                            th:checked="${availabilityList?.contains('TUESDAY')}"> Tuesday</label><br>
-                        <label><input type="checkbox" name="availability" value="WEDNESDAY"
-                            th:checked="${availabilityList?.contains('WEDNESDAY')}"> Wednesday</label><br>
-                        <label><input type="checkbox" name="availability" value="THURSDAY"
-                            th:checked="${availabilityList?.contains('THURSDAY')}"> Thursday</label><br>
-                    </div>
-                    <div class="col-6">
-                        <label><input type="checkbox" name="availability" value="FRIDAY"
-                            th:checked="${availabilityList?.contains('FRIDAY')}"> Friday</label><br>
-                        <label><input type="checkbox" name="availability" value="SATURDAY"
-                            th:checked="${availabilityList?.contains('SATURDAY')}"> Saturday</label><br>
-                        <label><input type="checkbox" name="availability" value="SUNDAY"
-                            th:checked="${availabilityList?.contains('SUNDAY')}"> Sunday</label><br>
-                        <label><input type="checkbox" name="availability" value="EVERYDAY"
-                            th:checked="${availabilityList?.contains('EVERYDAY')}"> Everyday</label><br>
-                    </div>
-                </div>
-            </div>
-
-            <button class="btn btn-primary">Save Changes</button>
-
-            <div th:if="${param.updated}">
-                <p class="text-success mt-2">Profile updated successfully!</p>
-            </div>
-        </form>
-    </div>
-
 </div>
 
 </body>

@@ -2,9 +2,6 @@ package com.example.mindbridge.controller;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -12,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.mindbridge.model.Counselor;
 import com.example.mindbridge.model.User;
@@ -57,32 +53,6 @@ public class CounselorDashboardController {
         var todayList = appointmentRepository.findByCounselorAndDateAndStatusOrderByTimeAsc(counselor, today, "APPROVED");
 
         // -----------------------------
-        //     SPECIALTY HANDLING
-        // -----------------------------
-        String specialty = counselor.getSpecialty();
-        if (specialty == null || specialty.isBlank()) {
-            specialty = null; // keep null for Thymeleaf to show "No specialty set"
-        }
-
-        // -----------------------------
-        //     AVAILABILITY HANDLING
-        // -----------------------------
-        String availabilityStr = counselor.getAvailability();
-        List<String> availabilityList;
-
-        if (availabilityStr == null || availabilityStr.isBlank()) {
-            availabilityList = Collections.emptyList();
-            availabilityStr = null; // for Thymeleaf
-        } else if (availabilityStr.equalsIgnoreCase("EVERYDAY")) {
-            availabilityList = Arrays.asList(
-                    "MONDAY", "TUESDAY", "WEDNESDAY",
-                    "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"
-            );
-        } else {
-            availabilityList = Arrays.asList(availabilityStr.split(","));
-        }
-
-        // -----------------------------
         //     SEND DATA TO FRONTEND
         // -----------------------------
         model.addAttribute("pendingCount", pendingCount);
@@ -91,50 +61,7 @@ public class CounselorDashboardController {
         model.addAttribute("todayList", todayList);
 
         model.addAttribute("counselorName", counselor.getFullName());
-        model.addAttribute("specialty", specialty);
-        model.addAttribute("availabilityList", availabilityList);
-        model.addAttribute("availability", availabilityStr);
 
         return "counselor-dashboard";
-    }
-
-    // ----------------------------------------------------
-    //           UPDATE PROFILE HANDLER
-    // ----------------------------------------------------
-    @PostMapping("/counselor/update-profile")
-    public String updateProfile(@AuthenticationPrincipal UserDetails userDetails,
-                                String specialty,
-                                String[] availability) {
-
-        if (userDetails == null) return "redirect:/login";
-
-        User user = userRepository.findByUsername(userDetails.getUsername()).orElse(null);
-        if (user == null || !(user instanceof Counselor)) return "redirect:/login";
-
-        Counselor counselor = (Counselor) user;
-
-        // -----------------------------
-        //       UPDATE SPECIALTY
-        // -----------------------------
-        counselor.setSpecialty(specialty != null ? specialty.trim() : "");
-
-        // -----------------------------
-        //       UPDATE AVAILABILITY
-        // -----------------------------
-        if (availability != null && availability.length > 0) {
-            List<String> list = Arrays.asList(availability);
-            if (list.contains("EVERYDAY")) {
-                counselor.setAvailability("EVERYDAY");
-            } else {
-                counselor.setAvailability(String.join(",", list));
-            }
-        } else {
-            counselor.setAvailability("");
-        }
-
-        userRepository.save(counselor);
-
-        // Redirect to dashboard with success flag
-        return "redirect:/counselor/dashboard?updated=true";
     }
 }

@@ -19,6 +19,11 @@
                         <a th:class="${activePage == 'appointment' ? 'nav-link active' : 'nav-link'}" 
                            th:href="@{/counselor/appointments}">Appointment</a>
                     </li>
+                    <!-- Profile Tab -->
+                    <li>
+                        <a th:class="${activePage == 'profile' ? 'nav-link active' : 'nav-link'}"
+                           th:href="@{/counselor/profile}">Profile</a>
+                    </li>
                 </ul>
             </div>
         </div>

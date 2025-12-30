@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.example.mindbridge.model.Counselor;
 import com.example.mindbridge.model.User;
+import com.example.mindbridge.model.Admin;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
@@ -27,6 +28,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // Fetch only counselors (subclass of User)
     @Query("SELECT c FROM Counselor c WHERE c.username = :username")
     Optional<Counselor> findCounselorByUsername(@Param("username") String username);
+
+    @Query("SELECT a FROM Admin a WHERE a.username = :username")
+    Optional<Admin> findAdminByUsername(@Param("username") String username);
+
 }
 
 
