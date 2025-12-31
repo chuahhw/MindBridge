@@ -116,6 +116,24 @@ public class StudentController {
         Student student = getLoggedInStudent(); 
         model.addAttribute("studentName", student.getFullName()); 
         model.addAttribute("student", student); 
+        // Add milestone data
+        long completedCount = learningModuleService.getCompletedCount(student);
+        long totalCount = learningModuleService.getTotalCount();
+        long percentage = 0;
+        if (totalCount > 0) {
+            percentage = (completedCount * 100) / totalCount;
+        }
+        String level;
+        if (percentage >= 75) level = "Advanced";
+        else if (percentage >= 40) level = "Intermediate";
+        else if (percentage > 0) level = "Beginner";
+        else level = "New Learner";
+
+        model.addAttribute("completedCount", completedCount);
+        model.addAttribute("totalCount", totalCount);
+        model.addAttribute("percentage", percentage);
+        model.addAttribute("level", level);
+
         return "profile"; 
     } 
     
@@ -126,6 +144,23 @@ public class StudentController {
         model.addAttribute("studentName", updatedStudent.getFullName()); 
         model.addAttribute("student", updatedStudent); 
         model.addAttribute("successMessage", "Profile updated successfully!"); 
+        // ensure milestone attributes present after update
+        long completedCount = learningModuleService.getCompletedCount(updatedStudent);
+        long totalCount = learningModuleService.getTotalCount();
+        long percentage = 0;
+        if (totalCount > 0) {
+            percentage = (completedCount * 100) / totalCount;
+        }
+        String level;
+        if (percentage >= 75) level = "Advanced";
+        else if (percentage >= 40) level = "Intermediate";
+        else if (percentage > 0) level = "Beginner";
+        else level = "New Learner";
+        model.addAttribute("completedCount", completedCount);
+        model.addAttribute("totalCount", totalCount);
+        model.addAttribute("percentage", percentage);
+        model.addAttribute("level", level);
+
         return "profile"; 
     } 
     
@@ -138,8 +173,24 @@ public class StudentController {
         } catch (IllegalArgumentException ex) { 
             model.addAttribute("errorMessage", ex.getMessage()); 
         } 
-        
         model.addAttribute("studentName", student.getFullName()); 
-        model.addAttribute("student", student); return "profile"; 
+        model.addAttribute("student", student);
+        // ensure milestone attributes present after change password
+        long completedCount = learningModuleService.getCompletedCount(student);
+        long totalCount = learningModuleService.getTotalCount();
+        long percentage = 0;
+        if (totalCount > 0) {
+            percentage = (completedCount * 100) / totalCount;
+        }
+        String level;
+        if (percentage >= 75) level = "Advanced";
+        else if (percentage >= 40) level = "Intermediate";
+        else if (percentage > 0) level = "Beginner";
+        else level = "New Learner";
+        model.addAttribute("completedCount", completedCount);
+        model.addAttribute("totalCount", totalCount);
+        model.addAttribute("percentage", percentage);
+        model.addAttribute("level", level);
+        return "profile"; 
     } 
 }
