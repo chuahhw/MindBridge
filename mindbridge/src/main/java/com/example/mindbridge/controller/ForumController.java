@@ -38,9 +38,12 @@ public class ForumController {
     // Single thread view for both roles
     @GetMapping("/forum/{threadId}")
     public String viewThread(@PathVariable Long threadId, Authentication authentication, Model model) {
+
+        //Get current user and specific thread by ID
         User user = userService.getLoggedInUser(authentication);
         ForumThread thread = forumService.getThreadById(threadId);
         
+        //Add all necessary data to model for the thread view
         model.addAttribute("user", user);
         model.addAttribute("studentName", user.getFullName());
         model.addAttribute("thread", thread);
@@ -48,7 +51,7 @@ public class ForumController {
         return "thread";
     }
 
-    // Create new thread - both roles can create
+    // Create new thread 
     @PostMapping("/forum/thread")
     public String createThread(@RequestParam String title, 
                               @RequestParam String content,
@@ -59,7 +62,7 @@ public class ForumController {
         return "redirect:/forum";
     }
 
-    // Add reply to thread - both roles can reply
+    // Add reply to thread 
     @PostMapping("/forum/thread/{threadId}/reply")
     public String addReply(@PathVariable Long threadId,
                           @RequestParam String content,

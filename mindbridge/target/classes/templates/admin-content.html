@@ -299,7 +299,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="viewThreadModalLabel">
-                        <i class="bi bi-chat-quote"></i> Forum Thread Details: <span th:text="${viewThread.title}">Thread Title</span>
+                        <i class="bi bi-chat-quote"></i> Forum Thread Details: <span th:text="${viewThread != null ? viewThread.title : 'Thread Title'}">Thread Title</span>
                     </h5>
                     <a href="/mindbridge/admin/content" class="btn-close" aria-label="Close"></a>
                 </div>
@@ -309,28 +309,28 @@
                         <div class="card-header bg-primary text-white">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div>
-                                    <h4 class="mb-1" th:text="${viewThread.title}">Thread Title</h4>
+                                    <h4 class="mb-1" th:text="${viewThread != null ? viewThread.title : 'Thread Title'}">Thread Title</h4>
                                     <div class="text-light">
                                         <div class="d-flex align-items-center gap-2">
                                             <span class="badge bg-light text-dark"><i class="bi bi-person"></i></span>
-                                            <span th:if="${viewThread.anonymous}">Posted by: Anonymous</span>
-                                            <span th:if="${!viewThread.anonymous and viewThread.createdBy != null}">
+                                            <span th:if="${viewThread != null and viewThread.anonymous}">Posted by: Anonymous</span>
+                                            <span th:if="${viewThread != null and !viewThread.anonymous and viewThread.createdBy != null}">
                                                 Posted by: <strong th:text="${viewThread.createdBy.fullName}"></strong>
                                                 (<span th:class="text-capitalize" th:text="${viewThread.createdBy.role}"></span>)
                                             </span>
-                                            <span th:if="${!viewThread.anonymous and viewThread.createdBy == null}">Posted by: Unknown</span>
+                                            <span th:if="${viewThread != null and !viewThread.anonymous and viewThread.createdBy == null}">Posted by: Unknown</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="text-end">
                                     <div class="mb-2">
                                         <small class="text-light">
-                                            <i class="bi bi-clock"></i> <span th:text="${#dates.format(viewThread.createdAt, 'MMM dd, yyyy HH:mm')}">Date</span>
+                                            <i class="bi bi-clock"></i> <span th:text="${viewThread != null and viewThread.createdAt != null ? #dates.format(viewThread.createdAt, 'MMM dd, yyyy HH:mm') : 'Date'}">Date</span>
                                         </small>
                                     </div>
                                     <div class="d-flex gap-2">
                                         <span class="badge bg-success">
-                                            <i class="bi bi-hand-thumbs-up"></i> <span th:text="${viewThread.likes}">0</span> Likes
+                                            <i class="bi bi-hand-thumbs-up"></i> <span th:text="${viewThread != null ? viewThread.likes : 0}">0</span> Likes
                                         </span>
                                     </div>
                                 </div>
@@ -338,7 +338,7 @@
                         </div>
                         <div class="card-body">
                             <h6 class="card-title">Thread Content:</h6>
-                            <div class="border rounded p-3 bg-light whitespace-pre-line" th:text="${viewThread.content}" style="white-space: pre-line;">
+                            <div class="border rounded p-3 bg-light whitespace-pre-line" th:text="${viewThread != null ? viewThread.content : ''}" style="white-space: pre-line;">
                                 Thread content...
                             </div>
                         </div>
@@ -348,10 +348,10 @@
                     <div class="replies-section">
                         <h5 class="mb-3 d-flex align-items-center gap-2">
                             <i class="bi bi-reply-all"></i>
-                            Replies (<span th:text="${viewThread.replies.size()}" class="text-primary"></span>)
+                            Replies (<span th:text="${viewThread != null and viewThread.replies != null ? viewThread.replies.size() : 0}" class="text-primary"></span>)
                         </h5>
 
-                        <div th:if="${viewThread.replies.size() > 0}">
+                        <div th:if="${viewThread != null and viewThread.replies != null and viewThread.replies.size() > 0}">
                             <div th:each="reply : ${viewThread.replies}" class="reply-card border-start border-4 border-info ps-3 mb-3 bg-white rounded shadow-sm p-3">
                                 <div class="d-flex justify-content-between align-items-start mb-2">
                                     <div class="d-flex align-items-center gap-2">
@@ -386,7 +386,7 @@
                             </div>
                         </div>
 
-                        <div th:if="${viewThread.replies.size() == 0}" class="text-center py-5 text-muted">
+                        <div th:if="${viewThread == null or viewThread.replies == null or viewThread.replies.size() == 0}" class="text-center py-5 text-muted">
                             <div class="mb-3">
                                 <i class="bi bi-chat-dots display-4 text-secondary"></i>
                             </div>
@@ -400,8 +400,8 @@
                     <div class="d-flex justify-content-between align-items-center w-100">
                         <div th:if="${viewThread}">
                             <small class="text-muted">
-                                Thread ID: <strong th:text="${viewThread.id}"></strong> |
-                                Total Replies: <strong th:text="${viewThread.replies.size()}"></strong>
+                                Thread ID: <strong th:text="${viewThread != null ? viewThread.id : ''}"></strong> |
+                                Total Replies: <strong th:text="${viewThread != null and viewThread.replies != null ? viewThread.replies.size() : 0}"></strong>
                             </small>
                         </div>
                         <div>

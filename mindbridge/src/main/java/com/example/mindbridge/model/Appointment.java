@@ -12,14 +12,17 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-@Entity
+//Define structure of appointments data
+@Entity  //JPA entity that will mapped to database table
 @Table(name = "appointments")
 public class Appointment {
-    @Id
+    @Id  //Primary key
+    //Autogenerate unique IDs (auto increment)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne  //Many appointment can belong to one student
+    //Creates foreign key in appointment table
     @JoinColumn(name = "student_id", nullable = false)
     private User student;
 
@@ -34,7 +37,7 @@ public class Appointment {
     private LocalTime time;
 
     @Column(nullable = false)
-    private String type; // "VIDEO_CALL", "IN_PERSON", "PHONE_CALL"
+    private String type; // "IN_PERSON"
 
     @Column(nullable = false)
     private String status = "PENDING"; // "PENDING", "APPROVED", "DECLINED", "COMPLETED"
@@ -45,6 +48,7 @@ public class Appointment {
     // Constructors
     public Appointment() {}
 
+    //Convenience constructor for creating new appointments
     public Appointment(User student, User counselor, LocalDate date, LocalTime time, String type, String notes) {
         this.student = student;
         this.counselor = counselor;
