@@ -15,7 +15,9 @@ import com.example.mindbridge.model.User;
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
 
+    //Automatic generate sql
     // Find appointments by student 
+    //Sorting date descending, time descending
     List<Appointment> findByStudentIdOrderByDateDescTimeDesc(Long studentId);
 
     // Find appointments by counselor

@@ -23,19 +23,22 @@ import com.example.mindbridge.service.UserService;
 public class AppointmentController {
 
     @Autowired
-    private AppointmentService appointmentService;
+    private AppointmentService appointmentService;  //handles business logic for appointment
 
     @Autowired
-    private UserService userService;
+    private UserService userService; //handles business logic for users
 
-    // Student: View appointments
     // Student: View appointments
     @GetMapping("/student/appointments")
     public String getStudentAppointments(Authentication authentication, Model model) {
         User student = userService.getLoggedInUser(authentication);
+
+         //Call service to get all appointments for this student using their ID
         List<Appointment> appointments = appointmentService.getStudentAppointments(student.getId());
-        List<User> counselors = userService.getAllCounselors();
         
+        List<User> counselors = userService.getAllCounselors();  
+        
+        //Add data to the model in HTML template
         model.addAttribute("appointments", appointments);
         model.addAttribute("counselors", counselors);
         model.addAttribute("studentName", student.getFullName()); 
@@ -47,6 +50,8 @@ public class AppointmentController {
     // Student: Book new appointment
     @PostMapping("/student/appointments")
     public String bookAppointment(
+
+        //Extracts parameters from the form submission
             @RequestParam Long counselorId,
             @RequestParam LocalDate date,
             @RequestParam LocalTime time,
@@ -63,9 +68,13 @@ public class AppointmentController {
         System.out.println("Notes: " + notes);
         
         try {
+
+            //Get current students and selected counselor
             User student = userService.getLoggedInUser(authentication);
             User counselor = userService.getUserById(counselorId);
             
+
+            //Checks counselor is available at the requested time or not
             if (!appointmentService.isTimeSlotAvailable(counselor, date, time)) {
                 redirectAttributes.addFlashAttribute("error", "Selected time slot is not available");
                 return "redirect:/student/appointments";
@@ -86,6 +95,8 @@ public class AppointmentController {
     @GetMapping("/counselor/appointments")
     public String getCounselorAppointments(Authentication authentication, Model model) {
         User counselor = userService.getLoggedInUser(authentication);
+
+        //Fetch all appointments for the respective counselor
         List<Appointment> allAppointments = appointmentService.getCounselorAppointments(counselor.getId());
         List<Appointment> pendingAppointments = appointmentService.getPendingAppointments(counselor.getId());
         
@@ -99,7 +110,7 @@ public class AppointmentController {
     // Counselor: Update appointment status
     @PostMapping("/counselor/appointments/{id}/status")
     public String updateAppointmentStatus(
-            @PathVariable Long id,
+            @PathVariable Long id,  //Extract id from URL path
             @RequestParam String status,
             Authentication authentication,
             RedirectAttributes redirectAttributes) {

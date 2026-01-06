@@ -136,6 +136,17 @@
             .profile-header { padding:20px; flex-direction:column; text-align:center; }
             .profile-section { padding:20px; }
         }
+
+        /* Milestones styling */
+        .milestones-section { padding:20px; }
+        .milestones-grid { display:flex; gap:20px; align-items:center; flex-wrap:wrap; }
+        .milestone-card { background:#f8fbff; border:1px solid #e6f0ff; padding:14px; border-radius:10px; box-shadow:none; min-width:220px; flex:1; }
+        .milestone-level-badge { display:inline-block; background:linear-gradient(90deg,#1666f2,#4d8af0); color:#fff; padding:6px 10px; border-radius:999px; font-weight:700; }
+        .milestone-count { font-size:18px; font-weight:700; color:#333; }
+        .milestone-meta { color:#666; font-size:13px; }
+        .milestone-progress { width:100%; max-width:520px; }
+        .progress { height:18px; background:#e9f2ff; border-radius:12px; overflow:hidden; }
+        .progress .progress-bar { background:linear-gradient(90deg,#2b8cff,#0f5fd6); color:#fff; font-weight:700; display:flex; align-items:center; justify-content:center; font-size:12px; }
     </style>
 </head>
 <body>
@@ -156,6 +167,38 @@
             <div class="profile-info">
                 <h1 th:text="${student.fullName}"></h1>
                 <span class="badge">STUDENT</span>
+            </div>
+        </div>
+
+        <!-- Milestones Section -->
+        <div class="profile-section milestones-section">
+            <div class="section-header">
+                <h2 class="section-title">Milestones</h2>
+            </div>
+
+            <div class="milestones-grid">
+                <div class="milestone-card">
+                    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+                        <div>
+                            <div class="milestone-meta">Level</div>
+                            <div class="milestone-level"><span class="milestone-level-badge" th:text="${level}">New Learner</span></div>
+                        </div>
+                        <div style="text-align:right;">
+                            <div class="milestone-meta">Completed</div>
+                            <div class="milestone-count"><span th:text="${completedCount}">0</span> / <span th:text="${totalCount}">0</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="milestone-card" style="flex:2;min-width:260px;">
+                    <div class="milestone-meta" style="margin-bottom:8px;">Overall Progress</div>
+                    <div class="milestone-progress">
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" th:style="${'width:' + percentage + '%'}" th:text="${percentage + '%'}">0%</div>
+                        </div>
+                    </div>
+                    <div class="milestone-meta" style="margin-top:8px;color:#555;">Keep going — complete more modules to reach the next milestone!</div>
+                </div>
             </div>
         </div>
 
