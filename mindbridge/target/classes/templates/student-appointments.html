@@ -536,30 +536,30 @@
             
             <!-- Appointment Cards -->
             <div th:each="appointment : ${appointments}">
-                <div class="appointment-card">
+                <div class="appointment-card" th:if="${appointment != null}">
                     <div class="appointment-header">
-                        <h4 class="counselor-name" th:text="${appointment.counselor.fullName}">Dr. Michael Chen</h4>
+                        <h4 class="counselor-name" th:text="${appointment.counselor != null ? appointment.counselor.fullName : 'Unknown Counselor'}">Dr. Michael Chen</h4>
                         <span class="status-badge" 
                             th:classappend="${appointment.status == 'APPROVED' ? 'approved' : 
                                             appointment.status == 'COMPLETED' ? 'completed' : 
                                             appointment.status == 'PENDING' ? 'pending' : 
                                             appointment.status == 'DECLINED' ? 'declined' : ''}">
-                            <span th:text="${appointment.status}">Approved</span>
+                            <span th:text="${appointment.status != null ? appointment.status : 'UNKNOWN'}">Approved</span>
                         </span>
                     </div>
                     
-                    <div class="appointment-details">
+                    <div class="appointment-details" th:if="${appointment.date != null and appointment.time != null}">
                         <span th:text="${#temporals.format(appointment.date, 'M/d/yyyy')}">11/10/2025</span>
                         at
                         <span th:text="${#temporals.format(appointment.time, 'hh:mm a')}">02:00 PM</span>
                     </div>
                     
-                    <div th:if="${appointment.notes}" class="appointment-note">
+                    <div th:if="${appointment.notes != null and !appointment.notes.isEmpty()}" class="appointment-note">
                         <strong>Your note:</strong> <span th:text="${appointment.notes}">Initial consultation</span>
                     </div>
                     
                     <!-- Show decline reason if appointment was declined -->
-                    <div th:if="${appointment.status == 'DECLINED' && appointment.declineReason}" class="decline-reason">
+                    <div th:if="${appointment.status == 'DECLINED' and appointment.declineReason != null and !appointment.declineReason.isEmpty()}" class="decline-reason">
                         <strong>Reason for decline:</strong>
                         <p th:text="${appointment.declineReason}">Counselor is not available at the selected time</p>
                     </div>

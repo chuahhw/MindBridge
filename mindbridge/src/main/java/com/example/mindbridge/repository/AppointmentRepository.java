@@ -15,10 +15,10 @@ import com.example.mindbridge.model.User;
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
 
-    //Automatic generate sql
-    // Find appointments by student 
+    //Find appointments by student with eager loading of relationships
     //Sorting date descending, time descending
-    List<Appointment> findByStudentIdOrderByDateDescTimeDesc(Long studentId);
+    @Query("SELECT DISTINCT a FROM Appointment a JOIN FETCH a.counselor JOIN FETCH a.student WHERE a.student.id = :studentId ORDER BY a.date DESC, a.time DESC")
+    List<Appointment> findByStudentIdOrderByDateDescTimeDesc(@Param("studentId") Long studentId);
 
     // Find appointments by counselor
     List<Appointment> findByCounselorIdOrderByDateDescTimeDesc(Long counselorId);

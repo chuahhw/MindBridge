@@ -45,6 +45,9 @@ public class Appointment {
     @Column(length = 1000)
     private String notes;
 
+    @Column(length = 1000)
+    private String declineReason;
+
     // Constructors
     public Appointment() {}
 
@@ -82,4 +85,7 @@ public class Appointment {
 
     public String getNotes() { return notes; }
     public void setNotes(String notes) { this.notes = notes; }
+
+    public String getDeclineReason() { return declineReason; }
+    public void setDeclineReason(String declineReason) { this.declineReason = declineReason; }
 }
