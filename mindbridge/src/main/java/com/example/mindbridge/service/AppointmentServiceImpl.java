@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.mindbridge.model.Appointment;
 import com.example.mindbridge.model.User;
@@ -21,6 +22,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     private UserService userService;
 
     @Override
+    @Transactional(readOnly = true)
     public List<Appointment> getStudentAppointments(Long studentId) {
         return appointmentRepository.findByStudentIdOrderByDateDescTimeDesc(studentId);
     }
@@ -42,11 +44,19 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public Appointment updateAppointmentStatus(Long appointmentId, String status) {
+    @Transactional
+    public Appointment updateAppointmentStatus(Long appointmentId, String status, String declineReason) {
         Appointment appointment = appointmentRepository.findById(appointmentId)
             .orElseThrow(() -> new RuntimeException("Appointment not found"));
         
+        // Only update status and declineReason, preserve all other fields including relationships
         appointment.setStatus(status);
+        // Only set declineReason if status is DECLINED
+        if ("DECLINED".equalsIgnoreCase(status)) {
+            appointment.setDeclineReason(declineReason != null && !declineReason.trim().isEmpty() ? declineReason : null);
+        } else {
+            appointment.setDeclineReason(null);
+        }
         return appointmentRepository.save(appointment);
     }
 

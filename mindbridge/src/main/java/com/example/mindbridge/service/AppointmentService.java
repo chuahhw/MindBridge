@@ -24,7 +24,7 @@ public interface AppointmentService {
     Appointment createAppointment(User student, User counselor, LocalDate date, LocalTime time, String type, String notes);
 
     //Change appointment status
-    Appointment updateAppointmentStatus(Long appointmentId, String status);
+    Appointment updateAppointmentStatus(Long appointmentId, String status, String declineReason);
 
     //Check time slot availability
     boolean isTimeSlotAvailable(User counselor, LocalDate date, LocalTime time);

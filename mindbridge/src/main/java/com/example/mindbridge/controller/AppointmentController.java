@@ -112,11 +112,12 @@ public class AppointmentController {
     public String updateAppointmentStatus(
             @PathVariable Long id,  //Extract id from URL path
             @RequestParam String status,
+            @RequestParam(required = false, defaultValue = "") String declineReason,
             Authentication authentication,
             RedirectAttributes redirectAttributes) {
         
         try {
-            appointmentService.updateAppointmentStatus(id, status);
+            appointmentService.updateAppointmentStatus(id, status, declineReason);
             redirectAttributes.addFlashAttribute("success", "Appointment status updated!");
             
         } catch (Exception e) {
